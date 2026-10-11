@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Page information -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Member Management | UP Community</title>
+  </head>
+  <body>
+    <!-- Site name and navigation -->
+    <header>
+      <p><strong>UP Community</strong></p>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="signup.html">Join Community</a></li>
+          <li><a href="members.html" aria-current="page">Member Management</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <h1>Member Management</h1>
+      <p>View community members and review their information.</p>
+      <p><a href="signup.html">Add a Member</a></p>
+
+      <!-- Member list -->
+      <section aria-labelledby="members-heading">
+        <h2 id="members-heading">Member List</h2>
+        <table id="member-table">
+          <caption>Community Members</caption>
+          <!-- Table column names -->
+          <thead>
+            <tr>
+              <th scope="col">Full Name</th>
+              <th scope="col">Username</th>
+              <th scope="col">Email</th>
+              <th scope="col">Age</th>
+              <th scope="col">Address</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Interests</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="member-list">
+            <!-- Member information rows -->
+            <tr>
+              <th scope="row">Alex Example</th>
+              <td>alex_example</td>
+              <td>alex@example.com</td>
+              <td>20</td>
+              <td>100 Example Street, State College, PA</td>
+              <td>Not provided</td>
+              <td>Classes, Movies</td>
+              <td><a href="#edit-member">Edit Alex Example</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Member edit form -->
+      <section id="edit-member" aria-labelledby="edit-heading">
+        <h2 id="edit-heading">Edit Member</h2>
+        <p id="edit-status">Update the member information below. Saving changes is not available yet.</p>
+
+        <!-- Save button is disabled until data handling is added -->
+        <form id="edit-member-form" aria-describedby="edit-status">
+          <!-- Member ID -->
+          <input type="hidden" id="member-id" name="id" value="member-demo-001" />
+
+          <!-- Current member information -->
+          <fieldset>
+            <legend>Member Information</legend>
+
+            <p>
+              <label for="edit-full-name">Full Name (required)</label><br />
+              <input type="text" id="edit-full-name" name="fullName" value="Alex Example"
+                autocomplete="name" required />
+            </p>
+
+            <p>
+              <label for="edit-username">Username (required)</label><br />
+              <input type="text" id="edit-username" name="username" value="alex_example"
+                autocomplete="username" minlength="3" maxlength="20"
+                pattern="[A-Za-z0-9_]{3,20}" aria-describedby="edit-username-help" required /><br />
+              <small id="edit-username-help">Use 3 to 20 letters, numbers, or underscores.</small>
+            </p>
+
+            <p>
+              <label for="edit-email">Email Address (required)</label><br />
+              <input type="email" id="edit-email" name="email" value="alex@example.com"
+                autocomplete="email" required />
+            </p>
+
+            <p>
+              <label for="edit-age">Age (required)</label><br />
+              <input type="number" id="edit-age" name="age" value="20" min="1" max="120"
+                step="1" aria-describedby="edit-age-help" required /><br />
+              <small id="edit-age-help">Enter a whole number from 1 to 120.</small>
+            </p>
+
+            <p>
+              <label for="edit-address">Address (required)</label><br />
+              <textarea id="edit-address" name="address" autocomplete="street-address"
+                rows="3" cols="30" required>100 Example Street, State College, PA</textarea>
+            </p>
+
+            <p>
+              <label for="edit-phone">Contact Phone Number (optional)</label><br />
+              <input type="tel" id="edit-phone" name="phone" autocomplete="tel" />
+            </p>
+          </fieldset>
+
+          <!-- Selected interests -->
+          <fieldset>
+            <legend>Community Interests (optional)</legend>
+            <p>
+              <input type="checkbox" id="edit-interest-classes" name="interests" value="Classes" checked />
+              <label for="edit-interest-classes">Classes and Study Groups</label>
+            </p>
+            <p>
+              <input type="checkbox" id="edit-interest-sports" name="interests" value="Sports" />
+              <label for="edit-interest-sports">Sports and Campus Life</label>
+            </p>
+            <p>
+              <input type="checkbox" id="edit-interest-movies" name="interests" value="Movies" checked />
+              <label for="edit-interest-movies">Movies and Entertainment</label>
+            </p>
+          </fieldset>
+
+          <!-- Reset the form -->
+          <p>
+            <button type="submit" disabled>Save Changes</button>
+            <button type="reset">Reset Changes</button>
+          </p>
+        </form>
+
+        <p><a href="#members-heading">Back to Member List</a></p>
+      </section>
+    </main>
+
+    <!-- Project footer -->
+    <footer>
+      <p>UP Community | IST 256 Group Project</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Page information -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join Community | UP Community</title>
+  </head>
+  <body>
+    <!-- Site name and navigation -->
+    <header>
+      <p><strong>UP Community</strong></p>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="signup.html" aria-current="page">Join Community</a></li>
+          <li><a href="members.html">Member Management</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <!-- Sign-up instructions -->
+      <h1>Join the Community</h1>
+      <p>Connect with other Penn State students at University Park.</p>
+      <p>Fields marked (required) must be completed.</p>
+      <p id="form-status">This is an HTML preview. Registrations are not saved yet.</p>
+
+      <!-- Save button is disabled until data handling is added -->
+      <form id="member-form" aria-describedby="form-status">
+        <!-- Member information fields -->
+        <fieldset>
+          <legend>Member Information</legend>
+
+          <p>
+            <label for="full-name">Full Name (required)</label><br />
+            <input type="text" id="full-name" name="fullName" autocomplete="name" required />
+          </p>
+
+          <!-- Username rules -->
+          <p>
+            <label for="username">Username (required)</label><br />
+            <input type="text" id="username" name="username" autocomplete="username"
+              minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}"
+              aria-describedby="username-help" required /><br />
+            <small id="username-help">Use 3 to 20 letters, numbers, or underscores.</small>
+          </p>
+
+          <p>
+            <label for="email">Email Address (required)</label><br />
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </p>
+
+          <!-- Age limits -->
+          <p>
+            <label for="age">Age (required)</label><br />
+            <input type="number" id="age" name="age" min="1" max="120" step="1"
+              aria-describedby="age-help" required /><br />
+            <small id="age-help">Enter a whole number from 1 to 120.</small>
+          </p>
+
+          <p>
+            <label for="address">Address (required)</label><br />
+            <textarea id="address" name="address" autocomplete="street-address"
+              rows="3" cols="30" required></textarea>
+          </p>
+
+          <p>
+            <label for="phone">Contact Phone Number (optional)</label><br />
+            <input type="tel" id="phone" name="phone" autocomplete="tel" />
+          </p>
+        </fieldset>
+
+        <!-- Optional interests -->
+        <fieldset>
+          <legend>Community Interests (optional)</legend>
+          <p>Select any topics that interest you.</p>
+          <p>
+            <input type="checkbox" id="interest-classes" name="interests" value="Classes" />
+            <label for="interest-classes">Classes and Study Groups</label>
+          </p>
+          <p>
+            <input type="checkbox" id="interest-sports" name="interests" value="Sports" />
+            <label for="interest-sports">Sports and Campus Life</label>
+          </p>
+          <p>
+            <input type="checkbox" id="interest-movies" name="interests" value="Movies" />
+            <label for="interest-movies">Movies and Entertainment</label>
+          </p>
+        </fieldset>
+
+        <!-- Clear the form -->
+        <p>
+          <button type="submit" disabled>Join Community</button>
+          <button type="reset">Clear Form</button>
+        </p>
+      </form>
+
+      <p><a href="members.html">View the member management page</a></p>
+    </main>
+
+    <!-- Project footer -->
+    <footer>
+      <p>UP Community | IST 256 Group Project</p>
+    </footer>
+  </body>
+</html>

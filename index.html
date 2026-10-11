@@ -1,18 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Page information -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IST 256</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <meta name="description" content="A community blog for Penn State students at University Park." />
+    <title>Home | UP Community</title>
   </head>
   <body>
-    <main>
-      <h1>Hello, world!</h1>
-      <p>Welcome to your IST 256 starter page.</p>
-      <button id="hello-button" type="button">Say hello</button>
-      <p id="message" aria-live="polite"></p>
+    <!-- Site name and navigation -->
+    <header>
+      <p><strong>UP Community</strong></p>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" aria-current="page">Home</a></li>
+          <li><a href="signup.html">Join Community</a></li>
+          <li><a href="members.html">Member Management</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <!-- Welcome message and links -->
+      <h1>Welcome to UP Community</h1>
+      <p>A community blog for Penn State students at University Park.</p>
+      <p>Connect with classmates, share your interests, and stay involved in campus life.</p>
+      <p><a href="signup.html">Join the Community</a> | <a href="#interests">Explore Interests</a></p>
+
+      <!-- About the community -->
+      <section aria-labelledby="about-heading">
+        <h2 id="about-heading">About Our Community</h2>
+        <p>
+          UP Community brings University Park students together through shared interests
+          and conversations. Our goal is to make it easy for students to connect,
+          exchange ideas, and support one another.
+        </p>
+      </section>
+
+      <!-- Community interests -->
+      <section id="interests" aria-labelledby="interests-heading">
+        <h2 id="interests-heading">Community Interests</h2>
+        <p>These topics will guide our future blog posts and discussion spaces.</p>
+
+        <article>
+          <h3>Classes and Study Groups</h3>
+          <p>Find classmates, discuss courses, and connect with others who want to study together.</p>
+        </article>
+
+        <article>
+          <h3>Sports and Campus Life</h3>
+          <p>Talk about Penn State sports, student activities, and life at University Park.</p>
+        </article>
+
+        <article>
+          <h3>Movies and Entertainment</h3>
+          <p>Share movie recommendations and meet students with similar interests.</p>
+        </article>
+      </section>
+
+      <!-- Announcements -->
+      <section aria-labelledby="announcements-heading">
+        <h2 id="announcements-heading">Announcements</h2>
+        <article>
+          <h3>Welcome to UP Community</h3>
+          <p><strong>Example announcement</strong></p>
+          <p>Explore our topics and preview the member sign-up form.</p>
+        </article>
+      </section>
+
+      <!-- Community guidelines -->
+      <section aria-labelledby="expectations-heading">
+        <h2 id="expectations-heading">Community Expectations</h2>
+        <ul>
+          <li>Treat other members with respect.</li>
+          <li>Keep conversations relevant to the community.</li>
+          <li>Share helpful information and welcome different perspectives.</li>
+        </ul>
+      </section>
+
+      <!-- Link to the sign-up page -->
+      <section aria-labelledby="join-heading">
+        <h2 id="join-heading">Get Involved</h2>
+        <p><a href="signup.html">Visit the sign-up page</a> to preview registration.</p>
+      </section>
     </main>
+
+    <!-- Project footer -->
+    <footer>
+      <p>UP Community | IST 256 Group Project</p>
+    </footer>
   </body>
 </html>
