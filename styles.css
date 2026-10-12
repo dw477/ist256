@@ -43,3 +43,79 @@ button:focus-visible {
     padding: 1.5rem;
   }
 }
+
+.header-image{
+  width: 300px;
+  height:150px;
+  flex-shrink:0;
+  background-image: url("images/downtown.jpg");
+  background-size:cover;
+  background-position:center;
+
+
+}
+.header-content {
+  flex: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #e8edf2;
+  padding: 1rem;
+}
+.nav-group-ul{
+  display:flex; 
+  list-style:none;
+  padding:0;
+  margin:0;
+  gap:1rem;
+}
+.nav-group-li{
+  flex: 1;
+  height: 80px;
+/*height:100%;
+  width:80%;  */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  background-color: #cbd5e1;
+  border: 2px solid slategray;
+  box-sizing: border-box;
+
+  font-family:inherit;
+  font-weight:bolder;
+  color:cadetblue;
+  text-decoration:none;
+}
+
+.tab-h{
+  border: 2px solid #222;
+  text-align:center;
+
+}
+
+.row-leader{
+  font-style:italic;
+  text-align: center;
+}
+
+.member-table{
+  width:100%;
+  table-layout:fixed;
+  border-collapse:collapse;
+}
+
+td, th {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  vertical-align: top;
+  
+  padding-left: 6px;
+  padding-right:4px;
+  font-size: 12px;
+
+  border: 2px solid gray;
+}
