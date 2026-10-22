@@ -1,7 +1,29 @@
+
 {
-  "name": "Roy Agarwal",
-  "email": "rza5575@psu.edu",
-  "phone": "571-206-9348",
-  "year": "Junior",
-  "affiliation": "College of IST"
+  "posts": [
+    {
+      "id": 1,
+      "description": "Best Study Spots at Penn State",
+      "category": "Campus Life",
+      "format": "Article",
+      "value": 10,
+      "additionalInfo": "Popular places to study on campus"
+    },
+    {
+      "id": 2,
+      "description": "Penn State Football Weekend",
+      "category": "Sports",
+      "format": "Article",
+      "value": 15,
+      "additionalInfo": "Information about football game days"
+    },
+    {
+      "id": 3,
+      "description": "Tips for New Penn State Students",
+      "category": "Academics",
+      "format": "Guide",
+      "value": 10,
+      "additionalInfo": "Helpful tips for first-year students"
+    }
+  ]
 }
