@@ -73,8 +73,7 @@
       <!-- Member edit form -->
       <section id="edit-member" aria-labelledby="edit-heading">
         <h2 id="edit-heading">Edit Member</h2>
-        <p id="edit-status">Update the member information below. Saving changes is not available yet.</p>
-
+        <p id="edit-status" aria-live="polite">Select a member from the list to edit their information.</p>
         <!-- Save button is disabled until data handling is added -->
         <form id="edit-member-form" aria-describedby="edit-status">
           <!-- Member ID -->
@@ -142,10 +141,14 @@
 
           <!-- Reset the form -->
           <p>
-            <button type="submit" class="btn-success"disabled>Save Changes</button>
+            <button type="submit" class="btn-success">Save Changes</button>
             <button type="reset" class="btn-danger">Reset Changes</button>
           </p>
         </form>
+        <button type="button" class="btn btn-primary mt-3"
+        onclick="downloadMembers()">
+   Download Members JSON
+</button>
 
         <p><a href="#members-heading">Back to Member List</a></p>
       </section>
@@ -155,5 +158,6 @@
     <footer style="padding-left: 2rem;">
       <p>UP Community | IST 256 Group Project</p>
     </footer>
-  </body>
+<script src="script.js"></script>
+</body>
 </html>
