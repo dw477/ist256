@@ -1,3 +1,4 @@
+
 {
   "posts": [
     {
@@ -6,6 +7,7 @@
       "category": "Campus Life",
       "format": "Article",
       "value": 10,
+      "price": 0,
       "additionalInfo": "Popular places to study on campus"
     },
     {
@@ -14,6 +16,7 @@
       "category": "Sports",
       "format": "Article",
       "value": 15,
+      "price": 0,
       "additionalInfo": "Information about football game days"
     },
     {
@@ -22,7 +25,9 @@
       "category": "Academics",
       "format": "Guide",
       "value": 10,
+      "price": 0,
       "additionalInfo": "Helpful tips for first-year students"
     }
   ]
 }
+
