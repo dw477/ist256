@@ -13,44 +13,33 @@ $(document).ready(function () {
 
   let posts = [];
 
-  function loadPosts() {
-    const savedPosts = localStorage.getItem("communityPosts");
+  
+function loadPosts() {
+  $.getJSON("/api/posts", function (data) {
+    posts = data.posts;
+    displayPosts(posts);
+  }).fail(function () {
+    showMessage("Error loading posts.json.", "red");
+  });
+}
 
-    if (savedPosts !== null) {
-      try {
-        const savedData = JSON.parse(savedPosts);
+  
+function savePosts() {
+  return $.ajax({
+    url: "/api/posts",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ posts: posts }),
 
-        if (!Array.isArray(savedData.posts)) {
-          throw new Error("Invalid saved data");
-        }
+    success: function () {
+      showMessage("posts.json updated successfully!", "green");
+    },
 
-        posts = savedData.posts;
-        displayPosts(posts);
-        return;
-      } catch (error) {
-        console.error("Error reading saved posts:", error);
-      }
+    error: function () {
+      showMessage("Error saving posts.json.", "red");
     }
-
-    $.getJSON("posts.json", function (data) {
-      if (Array.isArray(data.posts)) {
-        posts = data.posts;
-        displayPosts(posts);
-      }
-    }).fail(function () {
-      showMessage("Error loading posts.json.", "red");
-    });
-  }
-  function savePosts() {
-    const data = {
-      posts: posts
-    };
-
-    localStorage.setItem(
-      "communityPosts",
-      JSON.stringify(data)
-    );
-  }
+  });
+}
   function showMessage(text, color) {
     $("#message").text(text).css("color", color);
   }
@@ -92,8 +81,6 @@ $(document).ready(function () {
 
   $("#postForm").on("submit", function (event) {
     event.preventDefault();
-
-    // Get input values
     const idText = $("#postId").val().trim();
     const id = Number(idText);
 
