@@ -1,136 +1,231 @@
 "use strict";
 
-const helloButton = document.querySelector("#hello-button");
-const message = document.querySelector("#message");
+$(document).ready(function () {
 
-if (helloButton && message) {
-   helloButton.addEventListener("click", () => {
-      message.textContent = "Hello from JavaScript!";
-   });
-}
+  const helloButton = document.querySelector("#hello-button");
+  const helloMessage = document.querySelector("#message");
 
-let members = JSON.parse(localStorage.getItem("members")) || [];
+  if (helloButton && helloMessage) {
+    helloButton.addEventListener("click", function () {
+      helloMessage.textContent = "Hello from JavaScript!";
+    });
+  }
 
-function addMember(name, email, phone, year, affiliation) {
-   const member = {
-      name: name,
-      email: email,
-      phone: phone,
-      year: year,
-      affiliation: affiliation
-   };
+  let posts = [];
 
-   members.push(member);
-   localStorage.setItem("members", JSON.stringify(members));
+  function loadPosts() {
+    const savedPosts = localStorage.getItem("communityPosts");
 
-   console.log("Member added:", member);
-}
+    if (savedPosts !== null) {
+      try {
+        const savedData = JSON.parse(savedPosts);
 
-function displayMembers() {
-   console.log("Community Members:");
+        if (!Array.isArray(savedData.posts)) {
+          throw new Error("Invalid saved data");
+        }
 
-   members.forEach(function(member) {
-      console.log(member);
-   });
-}
-
-let posts = JSON.parse(localStorage.getItem("posts")) || [];
-
-async function loadPosts() {
-   if (localStorage.getItem("posts") !== null) {
-      return;
-   }
-
-   try {
-      const response = await fetch("posts.json");
-
-      if (!response.ok) {
-         throw new Error("Could not load posts.json");
+        posts = savedData.posts;
+        displayPosts(posts);
+        return;
+      } catch (error) {
+        console.error("Error reading saved posts:", error);
       }
+    }
 
-      const data = await response.json();
-      posts = data.posts;
+    $.getJSON("posts.json", function (data) {
+      if (Array.isArray(data.posts)) {
+        posts = data.posts;
+        displayPosts(posts);
+      }
+    }).fail(function () {
+      showMessage("Error loading posts.json.", "red");
+    });
+  }
+  function savePosts() {
+    const data = {
+      posts: posts
+    };
 
-      localStorage.setItem("posts", JSON.stringify(posts));
-      displayPosts();
-   } catch (error) {
-      console.log("Error loading posts:", error);
-   }
-}
+    localStorage.setItem(
+      "communityPosts",
+      JSON.stringify(data)
+    );
+  }
+  function showMessage(text, color) {
+    $("#message").text(text).css("color", color);
+  }
 
-function addPost(id, description, category, format, value, additionalInfo) {
-   const post = {
-      id: Number(id),
+  function displayPosts(postList) {
+    $("#postsTable").empty();
+
+    postList.forEach(function (post) {
+
+      const row = $("<tr>");
+
+      $("<td>").text(post.id).appendTo(row);
+      $("<td>").text(post.description).appendTo(row);
+      $("<td>").text(post.category).appendTo(row);
+      $("<td>").text(post.format).appendTo(row);
+      $("<td>").text(post.value).appendTo(row);
+      $("<td>").text(post.additionalInfo || "").appendTo(row);
+
+      const editButton = $("<button>")
+        .text("Edit")
+        .addClass("btn btn-primary btn-sm")
+        .on("click", function () {
+          editPost(post.id);
+        });
+      const deleteButton = $("<button>")
+        .text("Delete")
+        .addClass("btn btn-danger btn-sm ms-2")
+        .on("click", function () {
+          deletePost(post.id);
+        });
+
+      $("<td>")
+        .append(editButton, deleteButton)
+        .appendTo(row);
+
+      $("#postsTable").append(row);
+    });
+  }
+
+  $("#postForm").on("submit", function (event) {
+    event.preventDefault();
+
+    // Get input values
+    const idText = $("#postId").val().trim();
+    const id = Number(idText);
+
+    const description = $("#postDescription").val().trim();
+    const category = $("#postCategory").val();
+    const format = $("#postFormat").val();
+
+    const valueText = $("#postValue").val().trim();
+    const value = Number(valueText);
+
+    const additionalInfo = $("#postAdditionalInfo").val().trim();
+     
+    if (
+      idText === "" ||
+      !Number.isInteger(id) ||
+      id <= 0 ||
+      description === "" ||
+      !category ||
+      !format ||
+      valueText === "" ||
+      !Number.isFinite(value) ||
+      value <= 0
+    ) {
+      showMessage(
+        "Error: Please fill out all required fields correctly.",
+        "red"
+      );
+      return;
+    }
+    const newPost = {
+      id: id,
       description: description,
       category: category,
       format: format,
-      value: Number(value),
+      value: value,
       additionalInfo: additionalInfo
-   };
+    };
 
-   posts.push(post);
-   localStorage.setItem("posts", JSON.stringify(posts));
+    const existingIndex = posts.findIndex(function (post) {
+      return post.id === id;
+    });
 
-   console.log("Post added:", post);
-   displayPosts();
-}
+    if (existingIndex === -1) {
+      posts.push(newPost);
 
-function updatePost(id, description, category, format, value, additionalInfo) {
-   const post = posts.find(function(post) {
-      return post.id === Number(id);
-   });
+      showMessage(
+        "Post added successfully!",
+        "green"
+      );
 
-   if (post) {
-      post.description = description;
-      post.category = category;
-      post.format = format;
-      post.value = Number(value);
-      post.additionalInfo = additionalInfo;
+    } else {
+      posts[existingIndex] = newPost;
 
-      localStorage.setItem("posts", JSON.stringify(posts));
-      console.log("Post updated:", post);
-      displayPosts();
-   }
-}
+      showMessage(
+        "Post updated successfully!",
+        "green"
+      );
+    }
 
-function displayPosts() {
-   console.log("Community Blog Posts:");
+    savePosts();
+    displayPosts(posts);
+    $("#postForm")[0].reset();
 
-   posts.forEach(function(post) {
-      console.log(post);
-   });
-}
+  });
 
-function downloadJSON(data, filename) {
-   const json = JSON.stringify(data, null, 2);
+  function editPost(id) {
 
-   const blob = new Blob([json], {
-      type: "application/json"
-   });
+    const post = posts.find(function (item) {
+      return item.id === id;
+    });
 
-   const url = URL.createObjectURL(blob);
-   const link = document.createElement("a");
+    if (post) {
 
-   link.href = url;
-   link.download = filename;
+      $("#postId").val(post.id);
+      $("#postDescription").val(post.description);
+      $("#postCategory").val(post.category);
+      $("#postFormat").val(post.format);
+      $("#postValue").val(post.value);
+      $("#postAdditionalInfo").val(post.additionalInfo);
 
-   document.body.appendChild(link);
-   link.click();
-   document.body.removeChild(link);
+      showMessage(
+        "Editing post " + id + ". Make changes and submit.",
+        "blue"
+      );
 
-   setTimeout(function() {
-      URL.revokeObjectURL(url);
-   }, 1000);
-}
+      document.querySelector("#postForm").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+  }
 
-function downloadMembers() {
-   downloadJSON({ members: members }, "members.json");
-}
+  function deletePost(id) {
 
-function downloadPosts() {
-   downloadJSON({ posts: posts }, "posts.json");
-}
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this post?"
+    );
 
-loadPosts();
-displayMembers();
+    if (confirmDelete) {
 
+      posts = posts.filter(function (post) {
+        return post.id !== id;
+      });
+
+      savePosts();
+      displayPosts(posts);
+
+      showMessage(
+        "Post deleted successfully!",
+        "green"
+      );
+    }
+  }
+
+  $("#searchInput").on("input", function () {
+
+    const searchText = $(this).val().toLowerCase().trim();
+
+    const filteredPosts = posts.filter(function (post) {
+
+      return (
+        String(post.id).includes(searchText) ||
+        post.description.toLowerCase().includes(searchText) ||
+        post.category.toLowerCase().includes(searchText) ||
+        post.format.toLowerCase().includes(searchText)
+      );
+    });
+
+    displayPosts(filteredPosts);
+  });
+   
+  if ($("#postsTable").length > 0) {
+    loadPosts();
+  }
+
+});
