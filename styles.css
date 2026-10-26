@@ -51,8 +51,8 @@ button:focus-visible {
   background-image: url("images/downtown.jpg");
   background-size:cover;
   background-position:center;
-
-
+  color: white;
+  text-shadow:0 0 10px rgba(0,0,0,1);
 }
 .header-content {
   flex: 2;
@@ -62,6 +62,7 @@ button:focus-visible {
   justify-content: center;
   background-color: #e8edf2;
   padding: 1rem;
+  background: linear-gradient(to right, rgb(30, 26, 51), rgb(89, 89, 148));
 }
 .nav-group-ul{
   display:flex; 
@@ -70,24 +71,27 @@ button:focus-visible {
   margin:0;
   gap:1rem;
 }
-.nav-group-li{
-  flex: 1;
-  height: 80px;
-/*height:100%;
-  width:80%;  */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.nav-group-li {
+    flex: 1;
+    height: 80px;
 
-  background-color: #cbd5e1;
-  border: 2px solid slategray;
-  box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.nav-group-li .btn {
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
 
-  font-family:inherit;
-  font-weight:bolder;
-  color:cadetblue;
-  text-decoration:none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 .tab-h{
@@ -118,4 +122,27 @@ td, th {
   font-size: 12px;
 
   border: 2px solid gray;
+}
+
+/* NEW second version css for NAVBAR
+
+CHANGED header ul list of bloxks to be responsive buttons 
+that resize and can be easily added as more page navigation needed
+dark blue shows current page...*/
+.page_header {
+  border-bottom-style:solid; 
+  border-width:1rem; 
+  border-color:rgb(30, 30, 35); 
+  background-color:slategray;
+}
+
+.active-page-btn {
+  background-color: rgb(111, 127, 178);
+  color: rgb(224, 207, 145);
+  border: 2px solid black
+}
+.inactive-page-btn {
+  background-color: rgb(14, 14, 24);
+  color: rgb(142, 142, 151);
+  border: 2px solid rgb(52, 52, 52)
 }
