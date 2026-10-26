@@ -13,16 +13,21 @@
   </head>
   <body>
     <!-- Site name and navigation -->
-    <header>
-      <p><strong>UP Community</strong></p>
-      <nav aria-label="Main navigation">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="signup.html">Join Community</a></li>
-          <li><a href="members.html">Member Management</a></li>
-          <li><a href="content.html" aria-current="page">Content Management</a></li>
-        </ul>
-      </nav>
+    <header class="d-flex flex-column flex-md-row align-items-stretch text-black border-bottom border-secondary">
+      <div class="header-image d-flex justify-content-center align-items-center text-white text-center">
+        <h1 class="d-inline fw-bold">UP Community</h1>
+      </div>
+      <div class="header-content">
+        <nav aria-label="Main navigation">
+          <ul class="nav-group-ul flex-wrap">
+            <li class="nav-group-li"><a class="text-decoration-none" href="index.html">Home</a></li>
+            <li class="nav-group-li"><a class="text-decoration-none" href="signup.html">Join Community</a></li>
+            <li class="nav-group-li"><a class="text-decoration-none" href="members.html">Member Management</a></li>
+            <li class="nav-group-li"><a class="text-decoration-none" href="content.html" aria-current="page">Content Management</a></li>
+            <li class="nav-group-li"><a class="text-decoration-none" href="cart.html">Shopping Cart</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <main id="main-content">
@@ -34,23 +39,23 @@
       <section aria-labelledby="form-heading">
         <h2 id="form-heading">Add or Edit a Post</h2>
         <p>Fields marked (required) must be completed.</p>
-        <!-- Save button is disabled until data handling is added -->
+        <!-- Save posts using the content management script -->
         <form id="content-form" aria-describedby="content-status">
           <!-- Post information fields -->
           <fieldset>
             <legend>Post Details</legend>
             <p>
               <label for="post-id">Post ID (required)</label><br />
-              <input type="text" id="post-id" name="id" required />
+              <input type="text" id="post-id" name="id" class="form-control" required />
             </p>
             <p>
               <label for="post-title">Title (required)</label><br />
-              <input type="text" id="post-title" name="title" required />
+              <input type="text" id="post-title" name="title" class="form-control" required />
             </p>
             <p>
               <!-- Community category options -->
               <label for="post-category">Category (required)</label><br />
-              <select id="post-category" name="category" required>
+              <select id="post-category" name="category" class="form-select" required>
                 <option value="" disabled selected>Select a category</option>
                 <option value="Classes">Classes and Study Groups</option>
                 <option value="Sports">Sports and Campus Life</option>
@@ -60,7 +65,7 @@
             <p>
               <!-- Post type options -->
               <label for="post-type">Type (required)</label><br />
-              <select id="post-type" name="type" required>
+              <select id="post-type" name="type" class="form-select" required>
                 <option value="" disabled selected>Select a type</option>
                 <option value="Article">Article</option>
                 <option value="Announcement">Announcement</option>
@@ -70,62 +75,64 @@
             <p>
               <!-- Post content -->
               <label for="post-content">Content (required)</label><br />
-              <textarea id="post-content" name="content" rows="5" cols="40" required></textarea>
+              <textarea id="post-content" name="content" class="form-control" rows="5" cols="40" required></textarea>
             </p>
           </fieldset>
           <!-- Save or reset the form -->
           <p>
-            <button type="submit" >Save Post</button>
-            <button type="reset">Reset Form</button>
+            <button type="submit" class="btn btn-success">Save Post</button>
+            <button type="reset" class="btn btn-danger">Reset Form</button>
           </p>
         </form>
       </section>
 
-      <!-- Post search; Search button is disabled until searching is added -->
-      <section aria-labelledby="search-heading">
+      <!-- Post search -->
+      <section aria-labelledby="search-heading" class="mt-4">
         <h2 id="search-heading">Search Posts</h2>
         <form id="content-search-form" role="search" aria-describedby="content-status">
           <p>
             <label for="content-search">Search by post ID, title, or category</label><br />
-            <input type="search" id="content-search" name="query" />
-            <button type="submit" >Search</button>
+            <input type="search" id="content-search" name="query" class="form-control" />
+            <button type="submit" class="btn btn-primary mt-2">Search</button>
           </p>
         </form>
         <p id="content-status" role="status" aria-live="polite"></p>
       </section>
 
       <!-- Post list -->
-      <section aria-labelledby="posts-heading">
+      <section aria-labelledby="posts-heading" class="mt-4">
         <h2 id="posts-heading">Post List</h2>
-        <table id="content-table">
-          <!-- Table column names -->
-          <thead>
-            <tr>
-              <th scope="col">Post ID</th>
-              <th scope="col">Title</th>
-              <th scope="col">Category</th>
-              <th scope="col">Type</th>
-              <th scope="col">Content</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="content-list">
-            <!-- Sample post information row -->
-            <tr>
-              <th scope="row">post-demo-001</th>
-              <td>Example study group announcement</td>
-              <td>Classes</td>
-              <td>Announcement</td>
-              <td>Join classmates for a study group at the library.</td>
-              <td><button type="button" disabled>Edit Sample Post</button></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table id="content-table" class="table">
+            <!-- Table column names -->
+            <thead>
+              <tr>
+                <th class="tab-h" scope="col">Post ID</th>
+                <th class="tab-h" scope="col">Title</th>
+                <th class="tab-h" scope="col">Category</th>
+                <th class="tab-h" scope="col">Type</th>
+                <th class="tab-h" scope="col">Content</th>
+                <th class="tab-h" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="content-list">
+              <!-- Sample post information row -->
+              <tr>
+                <th class="row-leader" scope="row">post-demo-001</th>
+                <td>Example study group announcement</td>
+                <td>Classes</td>
+                <td>Announcement</td>
+                <td>Join classmates for a study group at the library.</td>
+                <td><button type="button" class="btn btn-primary btn-sm" disabled>Edit Sample Post</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
 
     <!-- Project footer -->
-    <footer>
+    <footer class="ps-4">
       <p>UP Community | IST 256 Group Project</p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

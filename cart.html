@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Page information -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart | UP Community</title>
+
+    <!-- Bootstrap addon and shared stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Site name and navigation -->
+    <header class="d-flex flex-column flex-md-row align-items-stretch text-black" style="border-bottom-style:double; border-color:slategray">
+      <div class="header-image d-flex justify-content-center align-items-center text-white text-center">
+        <h1 class="d-inline fw-bold" style="text-shadow:0 0 10px rgba(0,0,0,1);">UP Community</h1>
+      </div>
+      <div class="header-content">
+        <nav aria-label="Main navigation">
+          <ul class="nav-group-ul flex-wrap">
+            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="index.html">Home</a></li>
+            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="signup.html">Join Community</a></li>
+            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="members.html">Member Management</a></li>
+            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="content.html">Content Management</a></li>
+            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="cart.html" aria-current="page">Shopping Cart</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Shopping cart instructions and feedback -->
+      <h1>Shopping Cart</h1>
+      <p>Search posts by Post ID or Title and add them to your cart.</p>
+      <p id="cartMessage" role="status" aria-live="polite"></p>
+      <noscript><p>Enable JavaScript to search posts and manage your cart.</p></noscript>
+
+      <!-- Search results include an Add to Cart button supplied by cart.js -->
+      <section aria-labelledby="products-heading">
+        <h2 id="products-heading">Search for Post</h2>
+        <!-- Search by post ID or title -->
+        <p>
+          <label for="cartSearch">Search by Post ID or Title</label><br />
+          <input type="search" id="cartSearch" name="query" class="form-control" placeholder="Enter a post ID or title" />
+        </p>
+        <div class="table-responsive">
+          <table class="table">
+            <caption>Matching posts available to add to your cart</caption>
+            <!-- Table column names -->
+            <thead>
+              <tr>
+                <th class="tab-h" scope="col">Post ID</th>
+                <th class="tab-h" scope="col">Title</th>
+                <th class="tab-h" scope="col">Category</th>
+                <th class="tab-h" scope="col">Type</th>
+                <th class="tab-h" scope="col">Content</th>
+                <th class="tab-h" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <!-- Matching post rows are inserted here by cart.js -->
+            <tbody id="productList"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Selected posts include a Remove button supplied by cart.js -->
+      <section aria-labelledby="cart-heading" class="mt-4">
+        <h2 id="cart-heading">Your Cart</h2>
+        <!-- Number of selected posts -->
+        <p aria-live="polite">Posts in cart: <span id="cartCount">0</span></p>
+        <div class="table-responsive">
+          <table class="table">
+            <caption>Posts currently in your cart</caption>
+            <!-- Table column names -->
+            <thead>
+              <tr>
+                <th class="tab-h" scope="col">Title</th>
+                <th class="tab-h" scope="col">Category</th>
+                <th class="tab-h" scope="col">Content</th>
+                <th class="tab-h" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <!-- Selected post rows are inserted here by cart.js -->
+            <tbody id="cartList"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Prepare cart data for submission -->
+      <section aria-labelledby="submission-heading" class="mt-4">
+        <h2 id="submission-heading">Submit Cart</h2>
+        <p>Preview the selected posts as JSON or send your cart.</p>
+        <!-- Preview JSON or send it using AJAX; the API will be added later -->
+        <p>
+          <button type="button" id="previewJSON" class="btn btn-primary">Preview JSON</button>
+          <button type="button" id="sendCart" class="btn btn-success">Send Cart</button>
+        </p>
+        <!-- JSON document prepared from the selected posts -->
+        <pre id="jsonOutput" class="border rounded p-3" aria-live="polite"></pre>
+      </section>
+    </main>
+
+    <!-- Project footer -->
+    <footer style="padding-left:2rem;">
+      <p>UP Community | IST 256 Group Project</p>
+    </footer>
+
+    <!-- jQuery is required by the existing cart script -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="cart.js"></script>
+  </body>
+</html>
