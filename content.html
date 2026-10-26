@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Page information -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content Management | UP Community</title>
+
+    <!-- Bootstrap addon and shared stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <!-- Site name and navigation -->
+    <header class="d-flex align-items-stretch text-black page_header">
+      <div class="header-image d-flex justify-conent-center align-items-center text-center">
+        <h1 class="d-inline fw-bold">UP Community</h1>
+      </div>
+      <div class="header-content" >
+        <!--variable width group of variable width buttons for adding menu nav options.-->
+          <nav aria-label="Main navigation">
+            <ul class="nav-group-ul">
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='index.html'">Home</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='signup.html'">Join Community</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='members.html'">Member Management</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 active-page-btn" onclick="location.href='content.html'">Content Management</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='cart.html'">Shopping Cart</button>
+              </li>
+            </ul>
+          </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Content management instructions -->
+      <h1>Content Management</h1>
+      <p>Manage posts for the UP Community.</p>
+
+      <!-- Post add and edit form -->
+      <section aria-labelledby="form-heading">
+        <h2 id="form-heading">Add or Edit a Post</h2>
+        <p>Fields marked (required) must be completed.</p>
+        <!-- Save posts using the content management script -->
+        <form id="content-form" aria-describedby="content-status">
+          <!-- Post information fields -->
+          <fieldset>
+            <legend>Post Details</legend>
+            <p>
+              <label for="post-id">Post ID (required)</label><br />
+              <input type="text" id="post-id" name="id" class="form-control" required />
+            </p>
+            <p>
+              <label for="post-title">Title (required)</label><br />
+              <input type="text" id="post-title" name="title" class="form-control" required />
+            </p>
+            <p>
+              <!-- Community category options -->
+              <label for="post-category">Category (required)</label><br />
+              <select id="post-category" name="category" class="form-select" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="Classes">Classes and Study Groups</option>
+                <option value="Sports">Sports and Campus Life</option>
+                <option value="Movies">Movies and Entertainment</option>
+              </select>
+            </p>
+            <p>
+              <!-- Post type options -->
+              <label for="post-type">Type (required)</label><br />
+              <select id="post-type" name="type" class="form-select" required>
+                <option value="" disabled selected>Select a type</option>
+                <option value="Article">Article</option>
+                <option value="Announcement">Announcement</option>
+                <option value="Event">Event</option>
+              </select>
+            </p>
+            <p>
+              <!-- Post content -->
+              <label for="post-content">Content (required)</label><br />
+              <textarea id="post-content" name="content" class="form-control" rows="5" cols="40" required></textarea>
+            </p>
+          </fieldset>
+          <!-- Save or reset the form -->
+          <p>
+            <button type="submit" class="btn btn-success">Save Post</button>
+            <button type="reset" class="btn btn-danger">Reset Form</button>
+          </p>
+        </form>
+      </section>
+
+      <!-- Post search -->
+      <section aria-labelledby="search-heading" class="mt-4">
+        <h2 id="search-heading">Search Posts</h2>
+        <form id="content-search-form" role="search" aria-describedby="content-status">
+          <p>
+            <label for="content-search">Search by post ID, title, or category</label><br />
+            <input type="search" id="content-search" name="query" class="form-control" />
+            <button type="submit" class="btn btn-primary mt-2">Search</button>
+          </p>
+        </form>
+        <p id="content-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <!-- Post list -->
+      <section aria-labelledby="posts-heading" class="mt-4">
+        <h2 id="posts-heading">Post List</h2>
+        <div class="table-responsive">
+          <table id="content-table" class="table">
+            <!-- Table column names -->
+            <thead>
+              <tr>
+                <th class="tab-h" scope="col">Post ID</th>
+                <th class="tab-h" scope="col">Title</th>
+                <th class="tab-h" scope="col">Category</th>
+                <th class="tab-h" scope="col">Type</th>
+                <th class="tab-h" scope="col">Content</th>
+                <th class="tab-h" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="content-list">
+              <!-- Sample post information row -->
+              <tr>
+                <th class="row-leader" scope="row">post-demo-001</th>
+                <td>Example study group announcement</td>
+                <td>Classes</td>
+                <td>Announcement</td>
+                <td>Join classmates for a study group at the library.</td>
+                <td><button type="button" class="btn btn-primary btn-sm" disabled>Edit Sample Post</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Project footer -->
+    <footer class="ps-4">
+      <p>UP Community | IST 256 Group Project</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="content.js"></script>
+  </body>
+</html>

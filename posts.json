@@ -1,0 +1,33 @@
+
+{
+  "posts": [
+    {
+      "id": 1,
+      "description": "Best Study Spots at Penn State",
+      "category": "Campus Life",
+      "format": "Article",
+      "value": 10,
+      "price": 0,
+      "additionalInfo": "Popular places to study on campus"
+    },
+    {
+      "id": 2,
+      "description": "Penn State Football Weekend",
+      "category": "Sports",
+      "format": "Article",
+      "value": 15,
+      "price": 0,
+      "additionalInfo": "Information about football game days"
+    },
+    {
+      "id": 3,
+      "description": "Tips for New Penn State Students",
+      "category": "Academics",
+      "format": "Guide",
+      "value": 10,
+      "price": 0,
+      "additionalInfo": "Helpful tips for first-year students"
+    }
+  ]
+}
+
