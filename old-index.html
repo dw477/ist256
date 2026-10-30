@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+  </style>
+  <head>
+    <!-- Page information -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A community blog for Penn State students at University Park." />
+    <title>Home | UP Community</title>
+   
+    <!--Edit  added  bootsrap addon then css call-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <!-- Site name and navigation -->
+        <!-- edit notes,,, added header format & html classes
+               can be applied to any page & also associated classes in css style page-->
+    <header class="d-flex align-items-stretch text-black page_header">
+      <div class="header-logo d-flex justify-conent-center audiowide-regular align-items-center text-center">
+        <h1 class="d-inline">UP<br>Community</h1>
+      </div>
+      <div class="header-content" >
+        <!--variable width group of variable width buttons for adding menu nav options.-->
+          <nav aria-label="Main navigation">
+            <ul class="nav-group-ul">
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular active-page-btn" onclick="location.href='index.html'">Home</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='signup.html'">Signup</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='members.html'">Members</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='content.html'">Post!</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='cart.html'">Cart</button>
+              </li>
+            </ul>
+          </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+
+      <!-- Welcome message and links -->
+      <h1>Welcome to UP Community</h1>
+      <p>A community blog for Penn State students at University Park.</p>
+      <p>Connect with classmates, share your interests, and stay involved in campus life.</p>
+      <p><a href="signup.html">Join the Community</a> | <a href="#interests">Explore Interests</a></p>
+
+      <!-- About the community -->
+      <section aria-labelledby="about-heading">
+        <h2 id="about-heading">About Our Community</h2>
+        <p>
+          UP Community brings University Park students together through shared interests
+          and conversations. Our goal is to make it easy for students to connect,
+          exchange ideas, and support one another.
+        </p>
+      </section>
+
+      <!-- Community interests -->
+          <!--Edit note, I made it to a list group 
+          so each section looks better and is a link too-->
+      <section id="interests" aria-labelledby="interests-heading" style="padding-top:2rem;">
+        <h2 id="interests-heading">Community Interests</h2>
+        <p>These topics will guide our future blog posts and discussion spaces.</p>
+
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-felx w-100 justify-content-between">
+              <article>
+                <h4>Classes and Study Groups</h4>
+                <p>Find classmates, discuss courses, and connect with others who want to study together.</p>
+              </article>
+            </div>
+          </a>
+
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-felx w-100 justify-content-between">
+              <article>
+                <h4>Sports and Campus Life</h4>
+                <p>Talk about Penn State sports, student activities, and life at University Park.</p>
+              </article>
+            </div>
+          </a>
+
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-felx w-100 justify-content-between">
+              <article>
+                <h4>Movies and Entertainment</h4>
+                <p>Share movie recommendations and meet students with similar interests.</p>
+              </article>
+            </div>
+          </a>
+        </div>  
+      </section>
+
+
+      <!-- Announcements -->
+        <!--IDK what to put here or wheter 
+        to make sep page later, added same link-group list thing-->
+      <section aria-labelledby="announcements-heading" style="padding-top: 2rem;">
+        <h2 id="announcements-heading" style="font-weight:bold;">Announcements</h2>
+
+        <article>
+        <!--redundant header?
+        <h3 style="font-style: italic;">--Welcome to UP Community--</h3>-->
+            
+            <div class="list-group">
+              <a href="#" class="list-group-item list-group-item-action">
+                <h6><strong>Example announcement</strong></h6>
+                <p>Explore our topics and preview the member sign-up form.</p>
+              </a>
+
+              <a href="#" class="list-group-item list-group-item-action">
+                <h6><strong>Another announcement!</strong></h6>
+                <p>read me ! example abbreaviated text</p>
+              </a>
+            </div>
+
+        </article>
+      </section>
+
+      <!-- Community guidelines -->
+      <section aria-labelledby="expectations-heading"style="padding-top:2rem;">
+        <h2 id="expectations-heading">Community Expectations</h2>
+        <ul>
+          <li class="text-secondary">Treat other members with respect.</li>
+          <li class="text-secondary">Keep conversations relevant to the community.</li>
+          <li class="text-secondary">Share helpful information and welcome different perspectives.</li>
+        </ul>
+      </section>
+
+      <!-- Link to the sign-up page -->
+      <section aria-labelledby="join-heading">
+        <h2 id="join-heading">Get Involved</h2>
+        <p><a href="signup.html">Visit the sign-up page</a> to preview registration.</p>
+      </section>
+    </main>
+
+    <!-- Project footer -->
+    <footer style="padding-left:2rem;">
+      <p>UP Community | IST 256 Group Project</p>
+    </footer>
+
+    <!-- bootsrap js addon-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  </body>
+</html>
