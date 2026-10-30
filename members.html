@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+  <style>@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+  </style>
   <head>
     <!-- Page information -->
     <meta charset="UTF-8" />
@@ -13,30 +15,43 @@
   </head>
   <body>
     <!-- Site name and navigation -->
-    <header class="d-flex align-items-stretch text-black" style="border-bottom-style:double; border-color:slategray">
-      <div class="header-image d-flex justify-conent-center align-items-center text-white text-center">
-        <h1 class="d-inline fw-bold" style="text-shadow:0 0 10px rgba(0,0,0,1);">UP Community</h1>
+    <header class="d-flex align-items-stretch text-black page_header">
+      <div class="header-logo d-flex justify-conent-center audiowide-regular align-items-center text-center">
+        <h1 class="d-inline">UP<br>Community</h1>
       </div>
-      <div class="header-content">
-        <!--Could add back <p><strong>UP Community</strong></p> -->
+      <div class="header-content" >
+        <!--variable width group of variable width buttons for adding menu nav options.-->
           <nav aria-label="Main navigation">
             <ul class="nav-group-ul">
-              <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="index.html" aria-current="page">Home</a></li>
-              <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="signup.html">Join Community</a></li>
-              <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="members.html">Member Management</a></li>
-              <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="content.html">Content Management</a></li>
-              <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="cart.html">Shopping Cart</a></li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='index.html'">Home</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='signup.html'">Signup</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular active-page-btn" onclick="location.href='members.html'">Members</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='content.html'">Post!</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='cart.html'">Cart</button>
+              </li>
             </ul>
           </nav>
       </div>
     </header>
 
     <main id="main-content">
-      <h1>Member Management</h1>
+      <div class="content-layout nunito-text">
+        <div class="body-block">
+      <h1 class="nunito-bold">Member Management</h1>
       <p>View community members and review their information.</p>
       <p><a href="signup.html">Add a Member</a></p>
 
       <!-- Member list -->
+      
       <section aria-labelledby="members-heading">
         <h2 id="members-heading">Member List</h2>
         <table id="member-table">
@@ -75,7 +90,7 @@
 
       <!-- Member edit form -->
       <section id="edit-member" aria-labelledby="edit-heading">
-        <h2 id="edit-heading">Edit Member</h2>
+        <h2 id="edit-heading" class="nunito-bold">Edit Member</h2>
         <p id="edit-status" aria-live="polite">Select a member from the list to edit their information.</p>
         <!-- Save button is disabled until data handling is added -->
         <form id="edit-member-form" aria-describedby="edit-status">
@@ -127,7 +142,7 @@
 
           <!-- Selected interests -->
           <fieldset>
-            <legend>Community Interests (optional)</legend>
+            <legend class="nunito-bold">Community Interests (optional)</legend>
             <p>
               <input type="checkbox" id="edit-interest-classes" name="interests" value="Classes" checked />
               <label for="edit-interest-classes">Classes and Study Groups</label>
@@ -144,23 +159,26 @@
 
           <!-- Reset the form -->
           <p>
-            <button type="submit" class="btn-success">Save Changes</button>
-            <button type="reset" class="btn-danger">Reset Changes</button>
+            <button type="submit" class="btn w-50 h-75 audiowide-regular active-page-btn">Save Changes</button>
+            <button type="reset" class="btn w-50 h-75 audiowide-regular evil-page-btn">Reset Changes</button>
           </p>
         </form>
-        <button type="button" class="btn btn-primary mt-3"
+        <button type="button" class="btn file-page-btn w-30 h-75"
         onclick="downloadMembers()">
    Download Members JSON
 </button>
 
         <p><a href="#members-heading">Back to Member List</a></p>
       </section>
+    </div> <!-- Close body-block -->
+    </div> <!-- Close content-layout -->
     </main>
 
     <!-- Project footer -->
-    <footer style="padding-left: 2rem;">
-      <p>UP Community | IST 256 Group Project</p>
+    <footer style="padding-left:2rem;">
+      <p class="audiowide-regular tagline">UP Community | IST 256 Group II Project</p>
     </footer>
+
 <script src="script.js"></script>
 </body>
 </html>

@@ -2,20 +2,55 @@
   box-sizing: border-box;
 }
 
+/* NEW CSS stylesheet for SEMI-RETRO looking page, attempted overall polish
+ and consolidation towards a single unified image
+ classes should maintain similiar names, IF NOT... check TEST.HTML for reference to new baseline
+ */
+
+/*Button and modal font v v v*/
+.audiowide-regular {
+    font-family: "Audiowide", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.04em; 
+    font-size: clamp(16px, 4vw, 24px) !important;
+}
+
+/* bodt & text font BOLD and normal */
+.nunito-text{
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.nunito-bold {
+  font-family: "Nunito", sans-serif !important;
+  font-optical-sizing: auto!important;
+  font-weight: 700!important;
+  font-style: normal!important;
+}
+
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   line-height: 1.6;
   color: #222;
   background-color: #f5f5f5;
+  background-image: url("images/V 2-withlinearburn-darkoceany.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
 }
 
 main {
-  max-width: 800px;
-  margin: 3rem auto;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
+    width: 100%;
+    max-width: none;
+    margin: 2rem 0;
+    padding: 0;
+    background: transparent;
 }
 
 button {
@@ -44,15 +79,50 @@ button:focus-visible {
   }
 }
 
-.header-image{
-  width: 300px;
-  height:150px;
-  flex-shrink:0;
-  background-image: url("images/downtown.jpg");
-  background-size:cover;
-  background-position:center;
-
-
+.header-logo{
+  /*display:inline-flex;
+  position:relative;
+  color: white;
+  text-shadow:0 0 10px rgba(0,0,0,1);
+  background: linear-gradient(to top,#404040 0%,#000000 20%, #000000 40%,#000000 50%,#494949 60%, #494949 100%);
+  color: rgb(255, 255, 255);
+  border: 3px solid black;*/
+  font-size:small;
+  position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 250px;
+    height: 114px;
+    box-sizing: border-box;
+    letter-spacing: 0.01rem;
+    font-weight:600 !important;
+    font-size: 12px !important;
+    font-size-adjust: 0.44;
+    
+    border-radius: 0% 50% 50% 0%;
+    border: 5px solid black;
+    background-color: black;
+    background:
+    linear-gradient(
+        to top,
+        rgba(64, 64, 64,1) 0%,
+        rgba(0, 0, 0, 1) 25%,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0) 50%
+    ),
+    radial-gradient(
+        ellipse 105% 75% at 20% 75%,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 20%,
+        rgba(0, 0, 0, 1) 50%,
+        rgb(0, 0, 0) 65%,
+        rgba(73, 73, 73, 1) 90%,
+        rgba(73, 73, 73, 1) 100%
+    );
+    
+    color: white;
+    overflow:hidden
 }
 .header-content {
   flex: 2;
@@ -62,6 +132,12 @@ button:focus-visible {
   justify-content: center;
   background-color: #e8edf2;
   padding: 1rem;
+  padding-left: 254px;
+  background: linear-gradient(to top,#404040 0%,#000000 20%, #000000 40%,#000000 55%,#494949 63%, #494949 100%);
+  color: rgb(255, 255, 255);
+  border: 3px solid black;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
 }
 .nav-group-ul{
   display:flex; 
@@ -70,44 +146,50 @@ button:focus-visible {
   margin:0;
   gap:1rem;
 }
-.nav-group-li{
-  flex: 1;
-  height: 80px;
-/*height:100%;
-  width:80%;  */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.nav-group-li {
+    flex: 1;
+    height: 80px;
 
-  background-color: #cbd5e1;
-  border: 2px solid slategray;
-  box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.nav-group-li .btn {
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
 
-  font-family:inherit;
-  font-weight:bolder;
-  color:cadetblue;
-  text-decoration:none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 .tab-h{
-  border: 2px solid #222;
+  border: 2px solid #fefefe;
   text-align:center;
-
+  background:black;
+  color:white !important;
 }
 
 .row-leader{
   font-style:italic;
   text-align: center;
+  background:black;
 }
 
 .member-table{
   width:100%;
   table-layout:fixed;
   border-collapse:collapse;
+  background:black;
 }
 
-td, th {
+tr, td, th {
   white-space: normal;
   overflow-wrap: break-word;
   word-break: normal;
@@ -116,6 +198,139 @@ td, th {
   padding-left: 6px;
   padding-right:4px;
   font-size: 12px;
+  
+  color:white !important;
+  border: 2px solid rgb(139, 139, 139);
+  background:black;
+}
 
-  border: 2px solid gray;
+/* Second VER */
+.page_header {
+  background-color:rgb(0, 0, 0);
+}
+
+.active-page-btn {
+  background: linear-gradient(to top,#329FC8 0%,#1A319A 20%, #1A319A 40%,#1A319A 55%,#6C8AC2 63%, #6E8FC4 100%);
+  color: rgb(255, 255, 255);
+  border: 3px solid black;
+  border-radius: 7px;
+  &:hover {
+    border-color: #ffffff;
+  }
+  
+}
+.inactive-page-btn {
+  background: linear-gradient(to top,#404040 0%,#000000 20%, #000000 40%,#000000 55%,#494949 63%, #494949 100%);
+  color: rgb(255, 255, 255);
+  border: 3px solid black;
+  border-radius: 7px;
+  &:hover {
+    color:#ffffff;
+    border-color: #ffffff;
+  }
+}
+.evil-page-btn {
+  background: linear-gradient(to top,#c83232 0%,#9a1a1a 20%, #9a1a1a 40%,#9a1a1a 55%,#c26c6c 63%, #c46e6e 100%);
+  color: rgb(255, 255, 255);
+  border: 3px solid black;
+  border-radius: 7px;
+  &:hover {
+    border-color: #ffffff;
+  }
+  width:6rem;
+  height:4rem;
+  
+}
+.file-page-btn {
+  background: linear-gradient(to top,#32c839 0%,#1a9a29 20%, #1a9a3a 40%,#1a9a3a 55%,#6cc279 63%, #6ec47b 100%);
+  color: rgb(255, 255, 255);
+  border: 3px solid black;
+  border-radius: 7px;
+  &:hover {
+    border-color: #ffffff;
+  }
+  width:6rem;
+  height:4rem;
+  
+}
+.body-block {
+    display: block;
+    flex-direction:row;
+    background: linear-gradient(to top,rgba(40, 40, 40, 0.7) 0%,rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0,.7) 40%,rgba(0, 0, 0, 0.7) 55%,rgba(0, 0, 0, 0.7) 63%, rgba(61, 61, 61, 0.7) 100%);
+    color:white;
+    border: 4px solid black;
+    padding: 5px;
+    border-radius: 20px;
+
+
+    width: 70%;
+    min-width:0;
+
+}
+.content-right {
+    display: flex;
+    flex-direction:row;
+    background: linear-gradient(to top,rgba(40, 40, 40, 0.7) 0%,rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0,.7) 40%,rgba(0, 0, 0, 0.7) 55%,rgba(0, 0, 0, 0.7) 63%, rgba(61, 61, 61, 0.7) 100%);
+    border: 3px solid black;
+    border-radius: 10px;
+    color:white;
+    border: 4px solid black;
+    padding: 5px;
+
+    width: 20%;
+    min-width:0;
+
+    flex-direction:column;
+    gap:1.5rem;
+    
+}
+
+.right-item {
+    border: 3px solid black;
+    background: linear-gradient(to top,rgba(64, 64, 64, .7) 0%,rgba(0, 0, 0, .7) 20%, rgba(0, 0, 0,.7) 40%,rgba(0, 0, 0, 0.7) 55%,rgba(73, 73, 73,.7) 63%, rgba(73, 73, 73,.7) 100%);
+    color: white;
+    border-radius: 10px;
+}
+
+.tagline {
+    color:rgba(255,255,255,1)!important;
+    background: linear-gradient(to top,rgba(64, 64, 64, .7) 0%,rgba(0, 0, 0, .7) 20%, rgba(0, 0, 0,.7) 40%,rgba(0, 0, 0, 0.7) 55%,rgba(73, 73, 73,.7) 63%, rgba(73, 73, 73,.7) 100%);
+    text-align: center;
+    border-radius: 20px;
+    width:fit-content;
+    margin: 0 auto;
+    border: 4px solid black;
+    padding: 5px;
+}
+
+.announcements {
+    background: rgba(0,0,0,.1);
+    border: 2px solid rgb(199, 24, 24);
+    border-radius: 5px;
+    text-align:left;
+    padding-left: 5px;
+    color:white!important;
+    &:hover{
+        border-color: #00b33c;
+        background: rgba(0,0,0,1);
+    }
+
+}
+
+.content-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    width:95%;
+    margin: 0 auto;
+    gap: 2%
+}
+
+.hide-this{
+    background:rgba(0,0,0,0);
+}
+
+.captions {
+    color: white !important;
 }

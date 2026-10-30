@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+  <style>@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+  </style>
   <head>
     <!-- Page information -->
     <meta charset="UTF-8" />
@@ -12,24 +14,37 @@
   </head>
   <body>
     <!-- Site name and navigation -->
-    <header class="d-flex flex-column flex-md-row align-items-stretch text-black" style="border-bottom-style:double; border-color:slategray">
-      <div class="header-image d-flex justify-content-center align-items-center text-white text-center">
-        <h1 class="d-inline fw-bold" style="text-shadow:0 0 10px rgba(0,0,0,1);">UP Community</h1>
+    <header class="d-flex align-items-stretch text-black page_header">
+      <div class="header-logo d-flex justify-conent-center audiowide-regular align-items-center text-center">
+        <h1 class="d-inline">UP<br>Community</h1>
       </div>
-      <div class="header-content">
-        <nav aria-label="Main navigation">
-          <ul class="nav-group-ul flex-wrap">
-            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="index.html">Home</a></li>
-            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="signup.html">Join Community</a></li>
-            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="members.html">Member Management</a></li>
-            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="content.html">Content Management</a></li>
-            <li class="nav-group-li"><a style="text-decoration:none; color:mediumblue" href="cart.html" aria-current="page">Shopping Cart</a></li>
-          </ul>
-        </nav>
+      <div class="header-content" >
+        <!--variable width group of variable width buttons for adding menu nav options.-->
+          <nav aria-label="Main navigation">
+            <ul class="nav-group-ul">
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='index.html'">Home</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='signup.html'">Signup</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='members.html'">Members</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='content.html'">Post!</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular active-page-btn" onclick="location.href='cart.html'">Cart</button>
+              </li>
+            </ul>
+          </nav>
       </div>
     </header>
 
     <main id="main-content">
+      <div class="content-layout nunito-text">
+        <div class="body-block">
       <!-- Shopping cart instructions and feedback -->
       <h1>Shopping Cart</h1>
       <p>Search posts by Post ID or Title and add them to your cart.</p>
@@ -46,7 +61,7 @@
         </p>
         <div class="table-responsive">
           <table class="table">
-            <caption>Matching posts available to add to your cart</caption>
+            <caption class="captions">Matching posts available to add to your cart</caption>
             <!-- Table column names -->
             <thead>
               <tr>
@@ -65,13 +80,13 @@
       </section>
 
       <!-- Selected posts include a Remove button supplied by cart.js -->
-      <section aria-labelledby="cart-heading" class="mt-4">
+      <section aria-labelledby="cart-heading" class="mt-4 nunito-text">
         <h2 id="cart-heading">Your Cart</h2>
         <!-- Number of selected posts -->
         <p aria-live="polite">Posts in cart: <span id="cartCount">0</span></p>
         <div class="table-responsive">
           <table class="table">
-            <caption>Posts currently in your cart</caption>
+            <caption class="captions">Posts currently in your cart</caption>
             <!-- Table column names -->
             <thead>
               <tr>
@@ -92,18 +107,20 @@
         <h2 id="submission-heading">Submit Cart</h2>
         <p>Preview the selected posts as JSON or send your cart.</p>
         <!-- Preview JSON or send it using AJAX; the API will be added later -->
-        <p>
-          <button type="button" id="previewJSON" class="btn btn-primary">Preview JSON</button>
-          <button type="button" id="sendCart" class="btn btn-success">Send Cart</button>
+        <p class="captions">
+          <button type="button" id="previewJSON" class="btn file-page-btn">Preview JSON</button>
+          <button type="button" id="sendCart" class="btn active-page-btn">Send Cart</button>
         </p>
         <!-- JSON document prepared from the selected posts -->
         <pre id="jsonOutput" class="border rounded p-3" aria-live="polite"></pre>
       </section>
+    </div> <!-- Close body-block -->
+    </div> <!-- Close content-layout -->
     </main>
 
     <!-- Project footer -->
     <footer style="padding-left:2rem;">
-      <p>UP Community | IST 256 Group Project</p>
+      <p class="audiowide-regular tagline">UP Community | IST 256 Group II Project</p>
     </footer>
 
     <!-- jQuery is required by the existing cart script -->
