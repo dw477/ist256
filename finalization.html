@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Page information -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Preferences | UP Community</title>
+
+    <!-- Bootstrap addon and shared stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Site name and navigation -->
+    <header class="d-flex flex-column flex-lg-row align-items-stretch text-black page_header">
+      <div class="header-image mw-100 d-flex justify-content-center align-items-center text-center">
+        <h1 class="d-inline fw-bold">UP Community</h1>
+      </div>
+      <div class="header-content">
+        <nav aria-label="Main navigation">
+          <ul class="nav-group-ul flex-wrap">
+            <li class="nav-group-li">
+              <a class="btn w-100 inactive-page-btn" href="index.html">Home</a>
+            </li>
+            <li class="nav-group-li">
+              <a class="btn w-100 inactive-page-btn" href="signup.html">Join Community</a>
+            </li>
+            <li class="nav-group-li">
+              <a class="btn w-100 inactive-page-btn" href="members.html">Member Management</a>
+            </li>
+            <li class="nav-group-li">
+              <a class="btn w-100 inactive-page-btn" href="content.html">Content Management</a>
+            </li>
+            <li class="nav-group-li">
+              <a class="btn w-100 inactive-page-btn" href="cart.html">Shopping Cart</a>
+            </li>
+            <li class="nav-group-li">
+              <a class="btn w-100 active-page-btn" href="finalization.html" aria-current="page">Post Preferences</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Post preferences instructions -->
+      <h1>Post Preferences</h1>
+      <p>Choose default options for your posts.</p>
+      <p>Fields marked (required) must be completed.</p>
+      <!-- React form container -->
+      <div id="finalization-root">
+        <!-- Form feedback -->
+        <p id="post-preferences-status" role="status" aria-live="polite"></p>
+
+        <!-- Post preferences form -->
+        <form id="post-preferences-form" action="finalization.html" method="get" aria-describedby="post-preferences-status">
+          <!-- User and post preference fields -->
+          <fieldset>
+            <legend>Your Post Preferences</legend>
+            <p>
+              <label for="user-id">User ID (required)</label><br />
+              <input type="text" id="user-id" name="userId" class="form-control" required />
+            </p>
+            <p>
+              <!-- Community category options -->
+              <label for="post-category">Category (required)</label><br />
+              <select id="post-category" name="category" class="form-select" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="Classes">Classes and Study Groups</option>
+                <option value="Sports">Sports and Campus Life</option>
+                <option value="Movies">Movies and Entertainment</option>
+              </select>
+            </p>
+            <p>
+              <!-- Post type options -->
+              <label for="post-type">Type (required)</label><br />
+              <select id="post-type" name="type" class="form-select" required>
+                <option value="" disabled selected>Select a type</option>
+                <option value="Article">Article</option>
+                <option value="Announcement">Announcement</option>
+                <option value="Event">Event</option>
+              </select>
+            </p>
+          </fieldset>
+
+          <!-- Save or reset the form -->
+          <p>
+            <button type="submit" id="save-post-preferences" class="btn btn-success">Save Preferences</button>
+            <button type="reset" class="btn btn-danger">Clear Form</button>
+          </p>
+        </form>
+
+        <!-- JSON document prepared from the selected preferences -->
+        <pre id="post-preferences-json" class="border rounded p-3" aria-label="Post preferences JSON" hidden></pre>
+      </div>
+    </main>
+
+    <!-- Project footer -->
+    <footer class="ps-4">
+      <p>UP Community | IST 256 Group Project</p>
+    </footer>
+
+    <!-- jQuery and React for the post preferences script -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+    <script src="finalization.js"></script>
+  </body>
+</html>
