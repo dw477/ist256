@@ -9,12 +9,43 @@ $(document).ready(function () {
       .css("color", success ? "green" : "red");
   }
 
-  function loadPosts() {
-    $.getJSON("/api/posts", function (data) {
-      if (!Array.isArray(data.posts)) {
+
+function loadPosts() {
+  $.getJSON("/api/posts")
+    .done(function (data) {
+      if (!data || !Array.isArray(data.posts)) {
         showStatus("Invalid posts data.", false);
         return;
       }
+
+      posts = data.posts;
+      displayPosts(posts);
+      showStatus(posts.length + " posts loaded.", true);
+    })
+    .fail(function () {
+      $.getJSON("posts.json")
+        .done(function (data) {
+          if (!data || !Array.isArray(data.posts)) {
+            showStatus("Invalid posts.json data.", false);
+            return;
+          }
+
+          posts = data.posts;
+          displayPosts(posts);
+
+          showStatus(
+            "Posts loaded in read-only mode. Start the Node.js server to save changes.",
+            false
+          );
+        })
+        .fail(function () {
+          showStatus(
+            "Cannot load posts. Check the server and posts.json.",
+            false
+          );
+        });
+    });
+}
 
       posts = data.posts;
       displayPosts(posts);
