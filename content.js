@@ -47,12 +47,6 @@ function loadPosts() {
     });
 }
 
-      posts = data.posts;
-      displayPosts(posts);
-    }).fail(function () {
-      showStatus("Could not load posts from the API.", false);
-    });
-  }
 
   function displayPosts(items) {
     const tbody = $("#content-list");
