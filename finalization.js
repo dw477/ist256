@@ -1,9 +1,11 @@
 "use strict";
 
 const { useState, useEffect } = React;
+const h = React.createElement;
 
 function FinalizationApp() {
   const [posts, setPosts] = useState([]);
+
   const [form, setForm] = useState({
     postId: "",
     publicationDate: "",
@@ -15,44 +17,47 @@ function FinalizationApp() {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [savedJSON, setSavedJSON] = useState("");
-
-  // Load existing posts using jQuery AJAX
-  useEffect(() => {
+  const [jsonOutput, setJsonOutput] = useState("");
+  useEffect(function () {
     const request = $.getJSON("/api/posts")
-      .done(function(data) {
+      .done(function (data) {
         if (Array.isArray(data.posts)) {
           setPosts(data.posts);
         } else {
-          setMessage("Invalid post data.");
+          setMessage("Invalid posts data.");
           setIsError(true);
         }
       })
-      .fail(function() {
-        setMessage("Could not load blog posts.");
-        setIsError(true);
+      .fail(function (xhr, status) {
+        if (status !== "abort") {
+          setMessage("Could not load blog posts.");
+          setIsError(true);
+        }
       });
 
-    return () => request.abort();
+    return function () {
+      request.abort();
+    };
   }, []);
-
-  // Update React form state
   function handleChange(event) {
-    const { name, value } = event.target;
+    const name = event.target.name;
+    const value = event.target.value;
 
-    setForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setForm(function (previous) {
+      return {
+        ...previous,
+        [name]: value
+      };
+    });
   }
-
-  // Validate required fields
   function validateForm() {
     if (!form.postId) {
       return "Please select a blog post.";
     }
 
-    if (!posts.some(p => p.id === Number(form.postId))) {
+    if (!posts.some(function (post) {
+      return Number(post.id) === Number(form.postId);
+    })) {
       return "Selected blog post does not exist.";
     }
 
@@ -70,10 +75,10 @@ function FinalizationApp() {
 
     return null;
   }
-
-  // Submit JSON to the REST API
   function handleSubmit(event) {
     event.preventDefault();
+
+    if (saving) return;
 
     const error = validateForm();
 
@@ -97,165 +102,150 @@ function FinalizationApp() {
       2
     );
 
-    setSavedJSON(jsonData);
+    setJsonOutput(jsonData);
     setSaving(true);
-
-    // AJAX POST to backend
+    setMessage("");
     $.ajax({
       url: "/api/finalizations",
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(finalization)
     })
-    .done(function(response) {
-      setMessage(
-        "Publication preferences saved successfully!"
-      );
+    .done(function () {
+      setMessage("Publication preferences saved successfully!");
       setIsError(false);
     })
-    .fail(function(xhr) {
+    .fail(function (xhr) {
       setMessage(
         xhr.responseJSON?.error ||
         "Could not save publication preferences."
       );
       setIsError(true);
     })
-    .always(function() {
+    .always(function () {
       setSaving(false);
     });
   }
+  function selectField(label, name, choices) {
+    return h("div", { className: "mb-3", key: name },
+      h("label", {
+        className: "form-label",
+        htmlFor: name
+      }, label),
 
-  return (
-    <div className="container my-4">
-      <h2>Finalize a Blog Post</h2>
+      h("select", {
+        id: name,
+        name: name,
+        className: "form-select",
+        value: form[name],
+        onChange: handleChange
+      },
+        h("option", { value: "" }, "Choose an option"),
 
-      <form onSubmit={handleSubmit} noValidate>
+        choices.map(function (choice) {
+          return h("option", {
+            key: choice.value,
+            value: choice.value
+          }, choice.label);
+        })
+      )
+    );
+  }
+  return h("div", { className: "container my-4" },
 
-        <div className="mb-3">
-          <label className="form-label">
-            Select Blog Post
-          </label>
+    h("h2", null, "Finalize a Blog Post"),
 
-          <select
-            className="form-select"
-            name="postId"
-            value={form.postId}
-            onChange={handleChange}
-          >
-            <option value="">Choose a post</option>
+    h("form", {
+      onSubmit: handleSubmit,
+      noValidate: true
+    },
+      selectField(
+        "Select Blog Post",
+        "postId",
+        posts.map(function (post) {
+          return {
+            value: String(post.id),
+            label: post.description
+          };
+        })
+      ),
+      h("div", { className: "mb-3" },
+        h("label", {
+          className: "form-label",
+          htmlFor: "publicationDate"
+        }, "Publication Date"),
 
-            {posts.map(post => (
-              <option key={post.id} value={post.id}>
-                {post.description}
-              </option>
-            ))}
-          </select>
-        </div>
+        h("input", {
+          id: "publicationDate",
+          type: "date",
+          name: "publicationDate",
+          className: "form-control",
+          value: form.publicationDate,
+          onChange: handleChange
+        })
+      ),
+      selectField(
+        "Distribution Channel",
+        "distributionChannel",
+        [
+          { value: "Website", label: "Website" },
+          { value: "Newsletter", label: "Newsletter" },
+          { value: "Both", label: "Both" }
+        ]
+      ),
+      selectField(
+        "Review Status",
+        "reviewStatus",
+        [
+          { value: "Draft", label: "Draft" },
+          { value: "Pending Review", label: "Pending Review" },
+          { value: "Approved", label: "Approved" }
+        ]
+      ),
 
-        <div className="mb-3">
-          <label className="form-label">
-            Publication Date
-          </label>
+      h("div", { className: "mb-3" },
+        h("label", {
+          className: "form-label",
+          htmlFor: "notes"
+        }, "Editorial Notes"),
 
-          <input
-            type="date"
-            className="form-control"
-            name="publicationDate"
-            value={form.publicationDate}
-            onChange={handleChange}
-          />
-        </div>
+        h("textarea", {
+          id: "notes",
+          name: "notes",
+          className: "form-control",
+          rows: 3,
+          value: form.notes,
+          onChange: handleChange
+        })
+      ),
 
-        <div className="mb-3">
-          <label className="form-label">
-            Distribution Channel
-          </label>
+      h("button", {
+        type: "submit",
+        className: "btn btn-primary",
+        disabled: saving
+      }, saving ? "Saving..." : "Finalize Post")
+    ),
 
-          <select
-            className="form-select"
-            name="distributionChannel"
-            value={form.distributionChannel}
-            onChange={handleChange}
-          >
-            <option value="">Choose a channel</option>
-            <option value="Website">Website</option>
-            <option value="Newsletter">Newsletter</option>
-            <option value="Both">Both</option>
-          </select>
-        </div>
+    message && h("div", {
+      role: "status",
+      className: "alert mt-3 " +
+        (isError ? "alert-danger" : "alert-success")
+    }, message),
 
-        <div className="mb-3">
-          <label className="form-label">
-            Review Status
-          </label>
+      jsonOutput && h("div", { className: "mt-4" },
+      h("h4", null, "Generated JSON"),
 
-          <select
-            className="form-select"
-            name="reviewStatus"
-            value={form.reviewStatus}
-            onChange={handleChange}
-          >
-            <option value="">Choose a status</option>
-            <option value="Draft">Draft</option>
-            <option value="Pending Review">
-              Pending Review
-            </option>
-            <option value="Approved">Approved</option>
-          </select>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">
-            Editorial Notes
-          </label>
-
-          <textarea
-            className="form-control"
-            name="notes"
-            value={form.notes}
-            onChange={handleChange}
-            rows="3"
-          />
-        </div>
-
-        <button
-          className="btn btn-primary"
-          type="submit"
-          disabled={saving}
-        >
-          {saving ? "Saving..." : "Finalize Post"}
-        </button>
-      </form>
-
-      {message && (
-        <div
-          role="status"
-          className={
-            "alert mt-3 " +
-            (isError ? "alert-danger" : "alert-success")
-          }
-        >
-          {message}
-        </div>
-      )}
-
-      {savedJSON && (
-        <div className="mt-4">
-          <h4>Generated JSON</h4>
-          <pre className="bg-light p-3 border rounded">
-            {savedJSON}
-          </pre>
-        </div>
-      )}
-    </div>
+      h("pre", {
+        className: "bg-light p-3 border rounded"
+      }, jsonOutput)
+    )
   );
 }
-
-const rootElement =
-  document.getElementById("finalization-root");
+const rootElement = document.getElementById("finalization-root");
 
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
-    <FinalizationApp />
+    h(FinalizationApp)
   );
 }
+
