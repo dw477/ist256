@@ -13,20 +13,31 @@
   </head>
   <body>
     <!-- Site name and navigation -->
-    <header class="d-flex flex-column flex-md-row align-items-stretch text-black border-bottom border-secondary">
-      <div class="header-image d-flex justify-content-center align-items-center text-white text-center">
+    <header class="d-flex align-items-stretch text-black page_header">
+      <div class="header-image d-flex justify-conent-center align-items-center text-center">
         <h1 class="d-inline fw-bold">UP Community</h1>
       </div>
-      <div class="header-content">
-        <nav aria-label="Main navigation">
-          <ul class="nav-group-ul flex-wrap">
-            <li class="nav-group-li"><a class="text-decoration-none" href="index.html">Home</a></li>
-            <li class="nav-group-li"><a class="text-decoration-none" href="signup.html">Join Community</a></li>
-            <li class="nav-group-li"><a class="text-decoration-none" href="members.html">Member Management</a></li>
-            <li class="nav-group-li"><a class="text-decoration-none" href="content.html" aria-current="page">Content Management</a></li>
-            <li class="nav-group-li"><a class="text-decoration-none" href="cart.html">Shopping Cart</a></li>
-          </ul>
-        </nav>
+      <div class="header-content" >
+        <!--variable width group of variable width buttons for adding menu nav options.-->
+          <nav aria-label="Main navigation">
+            <ul class="nav-group-ul">
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='index.html'">Home</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='signup.html'">Join Community</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='members.html'">Member Management</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 active-page-btn" onclick="location.href='content.html'">Content Management</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 inactive-page-btn" onclick="location.href='cart.html'">Shopping Cart</button>
+              </li>
+            </ul>
+          </nav>
       </div>
     </header>
 
