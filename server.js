@@ -50,6 +50,113 @@ app.post("/api/posts", async (req, res) => {
   }
 });
 
+
+  
+// ========================================
+// FINALIZATION API
+// ========================================
+
+const finalizationsFile = path.join(
+  __dirname,
+  "finalizations.json"
+);
+
+// Get saved finalizations
+app.get("/api/finalizations", async (req, res) => {
+  try {
+    const data = await fs.readFile(
+      finalizationsFile,
+      "utf8"
+    );
+
+    res.json(JSON.parse(data));
+  } catch (error) {
+    res.status(500).json({
+      error: "Could not load finalizations."
+    });
+  }
+});
+
+// Save a new finalization
+app.post("/api/finalizations", async (req, res) => {
+  try {
+    const {
+      postId,
+      publicationDate,
+      distributionChannel,
+      reviewStatus,
+      notes = ""
+    } = req.body || {};
+
+    if (
+      !Number.isInteger(postId) ||
+      postId <= 0 ||
+      typeof publicationDate !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(publicationDate) ||
+      !["Website", "Newsletter", "Both"].includes(
+        distributionChannel
+      ) ||
+      !["Draft", "Pending Review", "Approved"].includes(
+        reviewStatus
+      ) ||
+      typeof notes !== "string"
+    ) {
+      return res.status(400).json({
+        error: "Invalid publication preferences."
+      });
+    }
+
+    // Verify blog post exists
+    const postsData = JSON.parse(
+      await fs.readFile(postsFile, "utf8")
+    );
+
+    if (!postsData.posts.some(p => p.id === postId)) {
+      return res.status(400).json({
+        error: "Blog post not found."
+      });
+    }
+
+    const data = JSON.parse(
+      await fs.readFile(finalizationsFile, "utf8")
+    );
+
+    if (!Array.isArray(data.finalizations)) {
+      throw new Error("Invalid finalizations file");
+    }
+
+    const finalization = {
+      id: data.finalizations.reduce(
+        (max, item) => Math.max(max, item.id || 0),
+        0
+      ) + 1,
+      postId,
+      publicationDate,
+      distributionChannel,
+      reviewStatus,
+      notes
+    };
+
+    data.finalizations.push(finalization);
+
+    await fs.writeFile(
+      finalizationsFile,
+      JSON.stringify(data, null, 2),
+      "utf8"
+    );
+
+    res.status(201).json({
+      message: "Finalization saved successfully!",
+      finalization
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      error: "Could not save finalization."
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
