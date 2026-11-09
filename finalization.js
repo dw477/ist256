@@ -221,7 +221,7 @@ function FinalizationApp() {
 
       h("button", {
         type: "submit",
-        className: "btn btn-primary",
+        className: "btn file-page-btn",
         disabled: saving
       }, saving ? "Saving..." : "Finalize Post")
     ),

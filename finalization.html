@@ -1,54 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+  <style>@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+  </style>
   <head>
     <!-- Page information -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A community blog for Penn State students at University Park." />
     <title>Post Preferences | UP Community</title>
 
-    <!-- Bootstrap addon and shared stylesheet -->
+    <!--Edit  added  bootsrap addon then css call-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet">
   </head>
+
+
   <body>
+
     <!-- Site name and navigation -->
-    <header class="d-flex flex-column flex-lg-row align-items-stretch text-black page_header">
-      <div class="header-image mw-100 d-flex justify-content-center align-items-center text-center">
-        <h1 class="d-inline fw-bold">UP Community</h1>
+    <!--Header && NAV bar section headers-->
+    <header class="d-flex align-items-stretch text-black page_header">
+      <div class="header-logo d-flex justify-conent-center audiowide-regular align-items-center text-center">
+        <h1 class="d-inline">UP<br>Community</h1>
       </div>
-      <div class="header-content">
-        <nav aria-label="Main navigation">
-          <ul class="nav-group-ul flex-wrap">
-            <li class="nav-group-li">
-              <a class="btn w-100 inactive-page-btn" href="index.html">Home</a>
-            </li>
-            <li class="nav-group-li">
-              <a class="btn w-100 inactive-page-btn" href="signup.html">Join Community</a>
-            </li>
-            <li class="nav-group-li">
-              <a class="btn w-100 inactive-page-btn" href="members.html">Member Management</a>
-            </li>
-            <li class="nav-group-li">
-              <a class="btn w-100 inactive-page-btn" href="content.html">Content Management</a>
-            </li>
-            <li class="nav-group-li">
-              <a class="btn w-100 inactive-page-btn" href="cart.html">Shopping Cart</a>
-            </li>
-            <li class="nav-group-li">
-              <a class="btn w-100 active-page-btn" href="finalization.html" aria-current="page">Post Preferences</a>
-            </li>
-          </ul>
-        </nav>
+      <div class="header-content" >
+        <!--variable width group of variable width buttons for adding menu nav options.-->
+          <nav aria-label="Main navigation">
+            <ul class="nav-group-ul">
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='index.html'">Home</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='signup.html'">Signup</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='members.html'">Members</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='content.html'">Post!</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular inactive-page-btn" onclick="location.href='cart.html'">Cart</button>
+              </li>
+              <li class="nav-group-li">
+                  <button class="btn w-100 h-75 audiowide-regular active-page-btn" onclick="location.href='finalization.html'">Preferences</button>
+              </li>
+            </ul>
+          </nav>
       </div>
     </header>
 
-    <main id="main-content">
+    <main id="main-content" class="hide-this">
       <!-- Post preferences instructions -->
-      <h1>Post Preferences</h1>
+      <div class="content-layout">
+      <div class="body-block nunito-text">
+      <h1 class="nunito-bold">Post Preferences</h1>
       <p>Choose default options for your posts.</p>
       <p>Fields marked (required) must be completed.</p>
       <!-- React form container -->
       <div id="finalization-root">
+    
+
+<!-- THIS portion loads but immediately gets overridden
+      By the DOM rendering part of finalization.js, i dont want to break the things i didnt mak/ i tried a little debuggin but couldnt get it.
+      
+      The proper css rules are applied to the body portion of this html so anything loaded within by the JS should be formatted and contained properly if not... let me know
+      -->
+
         <!-- Form feedback -->
         <p id="post-preferences-status" role="status" aria-live="polite"></p>
 
@@ -85,19 +103,22 @@
 
           <!-- Save or reset the form -->
           <p>
-            <button type="submit" id="save-post-preferences" class="btn btn-success">Save Preferences</button>
-            <button type="reset" class="btn btn-danger">Clear Form</button>
+            <button type="submit" id="save-post-preferences" class="btn active-page-btn">Save Preferences</button>
+            <button type="reset" class="btn evil-page-btn">Clear Form</button>
           </p>
-        </form>
+        <form>
 
         <!-- JSON document prepared from the selected preferences -->
         <pre id="post-preferences-json" class="border rounded p-3" aria-label="Post preferences JSON" hidden></pre>
       </div>
+
+      </div> <!--/body-block-->
+      </div> <!--/content-layout-->
     </main>
 
     <!-- Project footer -->
-    <footer class="ps-4">
-      <p>UP Community | IST 256 Group Project</p>
+    <footer style="padding-left:2rem;">
+      <p class="audiowide-regular tagline">UP Community | IST 256 Group II Project</p>
     </footer>
 
     <!-- jQuery and React for the post preferences script -->
