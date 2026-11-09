@@ -51,11 +51,6 @@ app.post("/api/posts", async (req, res) => {
 });
 
 
-  
-// ========================================
-// FINALIZATION API
-// ========================================
-
 const finalizationsFile = path.join(
   __dirname,
   "finalizations.json"
@@ -77,7 +72,6 @@ app.get("/api/finalizations", async (req, res) => {
   }
 });
 
-// Save a new finalization
 app.post("/api/finalizations", async (req, res) => {
   try {
     const {
@@ -106,7 +100,6 @@ app.post("/api/finalizations", async (req, res) => {
       });
     }
 
-    // Verify blog post exists
     const postsData = JSON.parse(
       await fs.readFile(postsFile, "utf8")
     );
@@ -153,6 +146,154 @@ app.post("/api/finalizations", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: "Could not save finalization."
+    });
+  }
+});
+
+const submissionsFile = path.join(
+  __dirname,
+  "submissions.json"
+);
+
+async function readSubmissions() {
+  const fileData = await fs.readFile(
+    submissionsFile,
+    "utf8"
+  );
+
+  const data = JSON.parse(fileData);
+
+  if (!Array.isArray(data.submissions)) {
+    throw new Error("Invalid submissions.json data.");
+  }
+
+  return data;
+}
+
+async function writeSubmissions(data) {
+  await fs.writeFile(
+    submissionsFile,
+    JSON.stringify(data, null, 2),
+    "utf8"
+  );
+}
+
+app.get("/api/submissions", async (req, res) => {
+  try {
+    const data = await readSubmissions();
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({
+      error: "Could not load submissions."
+    });
+  }
+});
+
+app.post("/api/submissions", async (req, res) => {
+  try {
+    const {
+      title,
+      author,
+      category,
+      content
+    } = req.body || {};
+
+    if (
+      typeof title !== "string" ||
+      !title.trim() ||
+      typeof author !== "string" ||
+      !author.trim() ||
+      typeof category !== "string" ||
+      !category.trim() ||
+      typeof content !== "string" ||
+      !content.trim()
+    ) {
+      return res.status(400).json({
+        error: "All required submission fields must be completed."
+      });
+    }
+
+    const data = await readSubmissions();
+
+    const nextId = data.submissions.reduce(
+      (max, item) => Math.max(max, item.id || 0),
+      0
+    ) + 1;
+
+    const newSubmission = {
+      id: nextId,
+      title: title.trim(),
+      author: author.trim(),
+      category: category.trim(),
+      content: content.trim(),
+      status: "Pending",
+      reviewNotes: "",
+      submittedAt: new Date().toISOString()
+    };
+
+    data.submissions.push(newSubmission);
+
+    await writeSubmissions(data);
+
+    res.status(201).json({
+      message: "Blog post submitted for approval!",
+      submission: newSubmission
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      error: "Could not save submission."
+    });
+  }
+});
+
+app.patch("/api/submissions/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { status } = req.body || {};
+
+    if (
+      !Number.isInteger(id) ||
+      id <= 0 ||
+      !["Approved", "Rejected"].includes(status)
+    ) {
+      return res.status(400).json({
+        error: "Invalid submission ID or status."
+      });
+    }
+
+    const data = await readSubmissions();
+
+    const submission = data.submissions.find(
+      item => item.id === id
+    );
+
+    if (!submission) {
+      return res.status(404).json({
+        error: "Submission not found."
+      });
+    }
+
+    if (submission.status !== "Pending") {
+      return res.status(409).json({
+        error: "This submission has already been reviewed."
+      });
+    }
+
+    submission.status = status;
+    submission.reviewedAt = new Date().toISOString();
+
+    await writeSubmissions(data);
+
+    res.json({
+      message: "Submission " + status.toLowerCase() + " successfully!",
+      submission: submission
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      error: "Could not update submission."
     });
   }
 });
