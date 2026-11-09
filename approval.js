@@ -19,21 +19,22 @@
         method: "GET",
         dataType: "json"
       })
-        .done(function (data) {
-          if (data && Array.isArray(data.submissions)) {
-            setSubmissions(data.submissions);
-          } else {
-            setMessage("Invalid submission data.");
-            setIsError(true);
-          }
-        })
-        .fail(function () {
-          setMessage("Could not load submissions.");
+      .done(function (data) {
+        if (data && Array.isArray(data.submissions)) {
+          setSubmissions(data.submissions);
+          setIsError(false);
+        } else {
+          setMessage("Invalid submission data.");
           setIsError(true);
-        })
-        .always(function () {
-          setLoading(false);
-        });
+        }
+      })
+      .fail(function () {
+        setMessage("Could not load submissions.");
+        setIsError(true);
+      })
+      .always(function () {
+        setLoading(false);
+      });
     }
 
     useEffect(function () {
@@ -49,89 +50,130 @@
         contentType: "application/json",
         data: JSON.stringify({ status: status })
       })
-        .done(function () {
-          setMessage("Submission " + status.toLowerCase() + " successfully!");
-          setIsError(false);
-          loadSubmissions();
-        })
-        .fail(function (xhr) {
-          setMessage(
-            xhr.responseJSON?.error || "Could not update submission."
-          );
-          setIsError(true);
-        })
-        .always(function () {
-          setUpdatingId(null);
-        });
+      .done(function () {
+        setMessage(
+          "Submission " + status.toLowerCase() + " successfully!"
+        );
+        setIsError(false);
+        loadSubmissions();
+      })
+      .fail(function (xhr) {
+        setMessage(
+          xhr.responseJSON?.error ||
+          "Could not update submission."
+        );
+        setIsError(true);
+      })
+      .always(function () {
+        setUpdatingId(null);
+      });
     }
 
     const pending = submissions.filter(function (item) {
       return item.status === "Pending";
     });
 
-    return h("div", { className: "container my-4" },
-      h("h2", null, "Review Community Blog Submissions"),
-
-      h("p", null, "Approve or reject posts submitted to UP Community."),
+    return h("div", { className: "mt-3" },
 
       message && h("div", {
-        className: "alert " + (isError ? "alert-danger" : "alert-success"),
-        role: "status"
+        role: "status",
+        className: "alert " +
+          (isError ? "alert-danger" : "alert-success")
       }, message),
 
       h("button", {
         type: "button",
-        className: "btn btn-outline-primary mb-3",
-        onClick: loadSubmissions,
-        disabled: loading
+        className: "btn file-page-btn text-white mb-3",
+        disabled: loading,
+        onClick: loadSubmissions
       }, "Refresh Submissions"),
 
       loading
         ? h("p", null, "Loading submissions...")
         : pending.length === 0
           ? h("p", null, "No submissions pending review.")
-          : h("div", { className: "row g-3" },
-              pending.map(function (item) {
-                return h("div", {
-                  className: "col-md-6",
-                  key: item.id
+          : pending.map(function (item) {
+
+              return h("article", {
+                key: item.id,
+                className: "border rounded p-3 mb-3"
+              },
+
+                h("p", null,
+                  h("span", {
+                    className: "badge bg-warning text-dark"
+                  }, "Pending Review")
+                ),
+
+                h("h2", { className: "h4" }, item.title),
+
+                h("dl", null,
+                  h("dt", null, "Author"),
+                  h("dd", null, item.author),
+
+                  h("dt", null, "Category"),
+                  h("dd", null, item.category),
+
+                  h("dt", null, "Type"),
+                  h("dd", null, item.type || "Article")
+                ),
+
+                h("h3", { className: "h5" },
+                  "Post Content"
+                ),
+
+                h("p", null, item.content),
+
+                h("div", {
+                  className: "d-flex flex-wrap gap-2"
                 },
-                  h("div", { className: "card h-100" },
-                    h("div", { className: "card-body" },
-                      h("h5", { className: "card-title" }, item.title),
-                      h("p", null, "Author: " + item.author),
-                      h("p", null, "Category: " + item.category),
-                      h("p", { className: "card-text" }, item.content),
-                      h("p", null, "Status: " + item.status),
 
-                      h("button", {
-                        type: "button",
-                        className: "btn btn-success me-2",
-                        disabled: updatingId !== null,
-                        onClick: function () {
-                          updateStatus(item.id, "Approved");
-                        }
-                      }, "Approve"),
+                  h("button", {
+                    type: "button",
+                    className:
+                      "btn file-page-btn text-white h-auto w-auto",
+                    disabled: updatingId !== null,
+                    onClick: function () {
+                      updateStatus(item.id, "Approved");
+                    }
+                  }, "Approve"),
 
-                      h("button", {
-                        type: "button",
-                        className: "btn btn-danger",
-                        disabled: updatingId !== null,
-                        onClick: function () {
-                          updateStatus(item.id, "Rejected");
-                        }
-                      }, "Reject")
-                    )
-                  )
-                );
-              })
-            )
+                  h("button", {
+                    type: "button",
+                    className:
+                      "btn evil-page-btn text-white h-auto w-auto",
+                    disabled: updatingId !== null,
+                    onClick: function () {
+                      updateStatus(item.id, "Rejected");
+                    }
+                  }, "Reject")
+                )
+              );
+            })
     );
   }
 
-  const approvalRoot = document.getElementById("approval-root");
+  const sample = document.querySelector(
+    'article[aria-labelledby="sample-title"]'
+  );
 
-  if (approvalRoot) {
-    ReactDOM.createRoot(approvalRoot).render(h(ApprovalApp));
+  if (!sample) {
+    console.error("Approval page sample container not found.");
+    return;
   }
+
+  sample.hidden = true;
+
+  const rootElement = document.createElement("div");
+  rootElement.id = "approval-live-root";
+
+  sample.parentNode.insertBefore(
+    rootElement,
+    sample.nextSibling
+  );
+
+  ReactDOM.createRoot(rootElement).render(
+    h(ApprovalApp)
+  );
+
 })();
