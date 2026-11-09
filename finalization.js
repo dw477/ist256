@@ -219,12 +219,35 @@ function FinalizationApp() {
         })
       ),
 
-      h("button", {
-        type: "submit",
-        className: "btn file-page-btn",
-        disabled: saving
-      }, saving ? "Saving..." : "Finalize Post")
-    ),
+     
+h("div", { className: "d-flex gap-2 mt-3" },
+
+  h("button", {
+    type: "submit",
+    className: "btn active-page-btn",
+    disabled: saving
+  }, saving ? "Saving..." : "Save Preferences"),
+
+  h("button", {
+    type: "button",
+    className: "btn evil-page-btn",
+    disabled: saving,
+    onClick: function () {
+      setForm({
+        postId: "",
+        publicationDate: "",
+        distributionChannel: "",
+        reviewStatus: "",
+        notes: ""
+      });
+
+      setMessage("");
+      setJsonOutput("");
+      setIsError(false);
+    }
+  }, "Clear Form")
+)
+
 
     message && h("div", {
       role: "status",
