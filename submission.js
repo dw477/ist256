@@ -1,74 +1,135 @@
-
 "use strict";
 
-const h = React.createElement;
-const { useState } = React;
+(function () {
+  const h = React.createElement;
+  const { useState, useEffect } = React;
 
-function SubmissionApp() {
-  const [form, setForm] = useState({
-    title: "",
-    author: "",
-    category: "",
-    content: ""
-  });
+  function SubmissionStatus() {
+    const [message, setMessage] = useState(
+      "Complete the form to submit a post for review."
+    );
+    const [isError, setIsError] = useState(false);
 
-  const [message, setMessage] = useState("");
-  const [isError, setIsError] = useState(false);
-  const [saving, setSaving] = useState(false);
+    useEffect(function () {
+      function updateStatus(event) {
+        setMessage(event.detail.message);
+        setIsError(event.detail.isError);
+      }
 
-  function handleChange(event) {
-    const { name, value } = event.target;
+      window.addEventListener("up-submission-status", updateStatus);
 
-    setForm(function (previous) {
-      return {
-        ...previous,
-        [name]: value
+      return function () {
+        window.removeEventListener(
+          "up-submission-status",
+          updateStatus
+        );
       };
-    });
+    }, []);
+
+    return h("span", {
+      className: isError ? "text-danger" : ""
+    }, message);
   }
 
-  function validateForm() {
-    if (!form.title.trim()) {
-      return "Please enter a post title.";
-    }
-
-    if (!form.author.trim()) {
-      return "Please enter an author name.";
-    }
-
-    if (!form.category) {
-      return "Please select a category.";
-    }
-
-    if (!form.content.trim()) {
-      return "Please enter post content.";
-    }
-
-    return null;
+  function showStatus(message, isError) {
+    window.dispatchEvent(new CustomEvent(
+      "up-submission-status",
+      {
+        detail: {
+          message: message,
+          isError: isError
+        }
+      }
+    ));
   }
 
-  function handleSubmit(event) {
+  const form = document.querySelector(
+    'form[aria-describedby="submission-status"]'
+  );
+
+  const statusElement = document.getElementById(
+    "submission-status"
+  );
+
+  if (!form || !statusElement) {
+    console.error("Submission HTML elements not found.");
+    return;
+  }
+
+  ReactDOM.createRoot(statusElement).render(
+    h(SubmissionStatus)
+  );
+
+  const submitButton = form.querySelector(
+    'button[type="submit"]'
+  );
+
+  submitButton.disabled = false;
+
+  form.noValidate = true;
+
+  let saving = false;
+
+  form.addEventListener("submit", function (event) {
     event.preventDefault();
 
     if (saving) return;
 
-    const error = validateForm();
+    const author = document.getElementById(
+      "author-name"
+    ).value.trim();
 
-    if (error) {
-      setMessage(error);
-      setIsError(true);
+    const title = document.getElementById(
+      "post-title"
+    ).value.trim();
+
+    const category = document.getElementById(
+      "post-category"
+    ).value;
+
+    const type = document.getElementById(
+      "post-type"
+    ).value;
+
+    const content = document.getElementById(
+      "post-content"
+    ).value.trim();
+
+    if (!author) {
+      showStatus("Please enter an author name.", true);
+      return;
+    }
+
+    if (!title) {
+      showStatus("Please enter a post title.", true);
+      return;
+    }
+
+    if (!category) {
+      showStatus("Please select a category.", true);
+      return;
+    }
+
+    if (!type) {
+      showStatus("Please select a post type.", true);
+      return;
+    }
+
+    if (!content) {
+      showStatus("Please enter post content.", true);
       return;
     }
 
     const submission = {
-      title: form.title.trim(),
-      author: form.author.trim(),
-      category: form.category,
-      content: form.content.trim()
+      title: title,
+      author: author,
+      category: category,
+      type: type,
+      content: content
     };
 
-    setSaving(true);
-    setMessage("");
+    saving = true;
+    submitButton.disabled = true;
 
     $.ajax({
       url: "/api/submissions",
@@ -77,118 +138,28 @@ function SubmissionApp() {
       data: JSON.stringify(submission)
     })
     .done(function () {
-      setMessage("Blog post submitted for approval!");
-      setIsError(false);
+      showStatus(
+        "Blog post submitted successfully! Pending review.",
+        false
+      );
 
-      setForm({
-        title: "",
-        author: "",
-        category: "",
-        content: ""
-      });
+      form.reset();
     })
     .fail(function (xhr) {
-      setMessage(
+      showStatus(
         xhr.responseJSON?.error ||
-        "Could not submit blog post."
+        "Error: Could not submit blog post.",
+        true
       );
-      setIsError(true);
     })
     .always(function () {
-      setSaving(false);
+      saving = false;
+      submitButton.disabled = false;
     });
-  }
+  });
 
-  function inputField(label, name) {
-    return h("div", {
-      className: "mb-3",
-      key: name
-    },
-      h("label", {
-        className: "form-label",
-        htmlFor: name
-      }, label),
+  form.addEventListener("reset", function () {
+    showStatus("Form cleared.", false);
+  });
 
-      h("input", {
-        type: "text",
-        id: name,
-        name: name,
-        className: "form-control",
-        value: form[name],
-        onChange: handleChange
-      })
-    );
-  }
-
-  return h("div", {
-    className: "container my-4"
-  },
-
-    h("h2", null, "Submit a Community Blog Post"),
-
-    h("form", {
-      onSubmit: handleSubmit,
-      noValidate: true
-    },
-
-      inputField("Post Title", "title"),
-      inputField("Author Name", "author"),
-
-      h("div", { className: "mb-3" },
-        h("label", {
-          className: "form-label",
-          htmlFor: "category"
-        }, "Category"),
-
-        h("select", {
-          id: "category",
-          name: "category",
-          className: "form-select",
-          value: form.category,
-          onChange: handleChange
-        },
-          h("option", { value: "" }, "Choose a category"),
-          h("option", { value: "Campus Life" }, "Campus Life"),
-          h("option", { value: "Sports" }, "Sports"),
-          h("option", { value: "Academics" }, "Academics"),
-          h("option", { value: "Events" }, "Events")
-        )
-      ),
-
-      h("div", { className: "mb-3" },
-        h("label", {
-          className: "form-label",
-          htmlFor: "content"
-        }, "Post Content"),
-
-        h("textarea", {
-          id: "content",
-          name: "content",
-          className: "form-control",
-          rows: 5,
-          value: form.content,
-          onChange: handleChange
-        })
-      ),
-
-      h("button", {
-        type: "submit",
-        className: "btn active-page-btn",
-        disabled: saving
-      }, saving ? "Submitting..." : "Submit Post")
-    ),
-
-    message && h("div", {
-      role: "status",
-      className: "alert mt-3 " +
-        (isError ? "alert-danger" : "alert-success")
-    }, message)
-  );
-}
-const submissionRoot = document.getElementById("submission-root");
-
-if (submissionRoot) {
-  ReactDOM.createRoot(submissionRoot).render(
-    h(SubmissionApp)
-  );
-}
+})();
