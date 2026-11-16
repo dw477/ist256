@@ -526,7 +526,172 @@ app.get("/api/database-test", (req, res) => {
     });
   }
 });
+  app.get("/api/preferences", (req, res) => {
+    try {
+      const preferences = db.prepare(`
+        SELECT preference_id, user_id, category, type
+        FROM preferences
+        ORDER BY preference_id
+      `).all();
 
+      res.json({ preferences });
+    } catch (error) {
+      console.error("Preferences read error:", error);
+      res.status(500).json({
+        error: "Could not retrieve preferences."
+      });
+    }
+  });
+
+  function validPreference(data) {
+    return (
+      data &&
+      Number.isSafeInteger(data.user_id) &&
+      data.user_id > 0 &&
+      typeof data.category === "string" &&
+      data.category.trim().length > 0 &&
+      typeof data.type === "string" &&
+      data.type.trim().length > 0
+    );
+  }
+  app.post("/api/preferences", (req, res) => {
+    try {
+      const data = req.body;
+
+      if (!validPreference(data)) {
+        return res.status(400).json({
+          error: "Valid user_id, category, and type are required."
+        });
+      }
+
+      const user = db.prepare(`
+        SELECT user_id FROM users WHERE user_id = ?
+      `).get(data.user_id);
+
+      if (!user) {
+        return res.status(400).json({
+          error: "User ID does not exist."
+        });
+      }
+
+      const result = db.prepare(`
+        INSERT INTO preferences
+          (user_id, category, type)
+        VALUES (?, ?, ?)
+      `).run(
+        data.user_id,
+        data.category.trim(),
+        data.type.trim()
+      );
+
+      const preference = db.prepare(`
+        SELECT preference_id, user_id, category, type
+        FROM preferences
+        WHERE preference_id = ?
+      `).get(result.lastInsertRowid);
+
+      res.status(201).json({
+        message: "Preference created successfully!",
+        preference
+      });
+    } catch (error) {
+      console.error("Preference create error:", error);
+      res.status(500).json({
+        error: "Could not create preference."
+      });
+    }
+  });
+
+app.put("/api/preferences/:id", (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const data = req.body;
+
+      if (
+        !Number.isSafeInteger(id) ||
+        id <= 0 ||
+        !validPreference(data)
+      ) {
+        return res.status(400).json({
+          error: "Invalid preference information."
+        });
+      }
+
+      const user = db.prepare(`
+        SELECT user_id FROM users WHERE user_id = ?
+      `).get(data.user_id);
+
+      if (!user) {
+        return res.status(400).json({
+          error: "User ID does not exist."
+        });
+      }
+
+      const result = db.prepare(`
+        UPDATE preferences
+        SET user_id = ?, category = ?, type = ?
+        WHERE preference_id = ?
+      `).run(
+        data.user_id,
+        data.category.trim(),
+        data.type.trim(),
+        id
+      );
+
+      if (result.changes === 0) {
+        return res.status(404).json({
+          error: "Preference not found."
+        });
+      }
+
+      const preference = db.prepare(`
+        SELECT preference_id, user_id, category, type
+        FROM preferences
+        WHERE preference_id = ?
+      `).get(id);
+
+      res.json({
+        message: "Preference updated successfully!",
+        preference
+      });
+    } catch (error) {
+      console.error("Preference update error:", error);
+      res.status(500).json({
+        error: "Could not update preference."
+      });
+    }
+  });
+  app.delete("/api/preferences/:id", (req, res) => {
+    try {
+      const id = Number(req.params.id);
+
+      if (!Number.isSafeInteger(id) || id <= 0) {
+        return res.status(400).json({
+          error: "Invalid preference ID."
+        });
+      }
+
+      const result = db.prepare(`
+        DELETE FROM preferences
+        WHERE preference_id = ?
+      `).run(id);
+
+      if (result.changes === 0) {
+        return res.status(404).json({
+          error: "Preference not found."
+        });
+      }
+
+      res.json({
+        message: "Preference deleted successfully!"
+      });
+    } catch (error) {
+      console.error("Preference delete error:", error);
+      res.status(500).json({
+        error: "Could not delete preference."
+      });
+    }
+  });
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
