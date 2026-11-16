@@ -2,52 +2,40 @@
 
 $(document).ready(function () {
   let posts = [];
+  let editingId = null;
+  let saving = false;
+
+  const form = $("#content-form");
+  const idInput = $("#post-id");
+  const saveButton = form.find('button[type="submit"]');
+  idInput.prop("disabled", true);
+  idInput.prop("required", false);
+  idInput.attr("placeholder", "Assigned automatically");
 
   function showStatus(message, success) {
     $("#content-status")
       .text(message)
       .css("color", success ? "green" : "red");
   }
+  function loadPosts() {
+    $.getJSON("/api/posts")
+      .done(function (data) {
+        if (!data || !Array.isArray(data.posts)) {
+          showStatus("Invalid post data.", false);
+          return;
+        }
 
-
-function loadPosts() {
-  $.getJSON("/api/posts")
-    .done(function (data) {
-      if (!data || !Array.isArray(data.posts)) {
-        showStatus("Invalid posts data.", false);
-        return;
-      }
-
-      posts = data.posts;
-      displayPosts(posts);
-      showStatus(posts.length + " posts loaded.", true);
-    })
-    .fail(function () {
-      $.getJSON("posts.json")
-        .done(function (data) {
-          if (!data || !Array.isArray(data.posts)) {
-            showStatus("Invalid posts.json data.", false);
-            return;
-          }
-
-          posts = data.posts;
-          displayPosts(posts);
-
-          showStatus(
-            "Posts loaded in read-only mode. Start the Node.js server to save changes.",
-            false
-          );
-        })
-        .fail(function () {
-          showStatus(
-            "Cannot load posts. Check the server and posts.json.",
-            false
-          );
-        });
-    });
-}
-
-
+        posts = data.posts;
+        displayPosts(posts);
+        showStatus(posts.length + " posts loaded.", true);
+      })
+      .fail(function () {
+        showStatus(
+          "Could not load posts from the database.",
+          false
+        );
+      });
+  }
   function displayPosts(items) {
     const tbody = $("#content-list");
     tbody.empty();
@@ -55,8 +43,10 @@ function loadPosts() {
     items.forEach(function (post) {
       const row = $("<tr>");
 
-      $("<th>").attr("scope", "row")
-        .text(post.id).appendTo(row);
+      $("<th>")
+        .attr("scope", "row")
+        .text(post.id)
+        .appendTo(row);
 
       $("<td>").text(post.description).appendTo(row);
       $("<td>").text(post.category).appendTo(row);
@@ -71,105 +61,200 @@ function loadPosts() {
           editPost(post.id);
         });
 
-      $("<td>").append(editButton).appendTo(row);
+      const deleteButton = $("<button>")
+        .attr("type", "button")
+        .addClass("btn btn-danger btn-sm ms-2")
+        .text("Delete")
+        .on("click", function () {
+          deletePost(post.id);
+        });
+
+      $("<td>")
+        .append(editButton, deleteButton)
+        .appendTo(row);
+
       tbody.append(row);
     });
   }
 
-  function editPost(id) {
-    const post = posts.find(function (p) {
-      return p.id === id;
-    });
+  function selectExistingOption(selector, value) {
+    const select = $(selector);
 
-    if (!post) return;
+    if (!select.find("option").filter(function () {
+      return this.value === value;
+    }).length) {
+      select.append(
+        $("<option>").val(value).text(value)
+      );
+    }
 
-    $("#post-id").val(post.id);
-    $("#post-title").val(post.description);
-    $("#post-category").val(post.category);
-    $("#post-type").val(post.format);
-    $("#post-content").val(post.additionalInfo || "");
-
-    showStatus("Editing post " + id, true);
+    select.val(value);
   }
 
-  $("#content-form").on("submit", function (event) {
-    event.preventDefault();
+  function editPost(id) {
+    const post = posts.find(function (item) {
+      return Number(item.id) === Number(id);
+    });
 
-    const idText = $("#post-id").val().trim();
-    const id = Number(idText);
-    const title = $("#post-title").val().trim();
-    const category = $("#post-category").val();
-    const type = $("#post-type").val();
-    const content = $("#post-content").val().trim();
-
-    if (
-      idText === "" ||
-      !Number.isInteger(id) ||
-      id <= 0 ||
-      !title ||
-      !category ||
-      !type ||
-      !content
-    ) {
-      showStatus("Please complete all required fields.", false);
+    if (!post) {
+      showStatus("Post not found.", false);
       return;
     }
 
-    const index = posts.findIndex(function (p) {
-      return p.id === id;
+    editingId = Number(post.id);
+
+    idInput.val(post.id);
+    $("#post-title").val(post.description);
+
+    selectExistingOption("#post-category", post.category);
+    selectExistingOption("#post-type", post.format);
+
+    $("#post-content").val(post.additionalInfo || "");
+
+    showStatus(
+      "Editing post " + post.id + ". Click Save Post.",
+      true
+    );
+
+    form[0].scrollIntoView({
+      behavior: "smooth"
     });
+  }
 
-    const previousPosts = posts.map(function (p) {
-      return { ...p };
-    });
+  function resetForm() {
+    editingId = null;
+    idInput.val("");
+  }
 
-    const post = {
-      id: id,
-      description: title,
-      category: category,
-      format: type,
-      value: index >= 0 ? posts[index].value : 5,
-      price: index >= 0 ? (posts[index].price ?? 0) : 0,
-      additionalInfo: content
-    };
+  form.on("reset", function () {
+    resetForm();
+  });
+  form.on("submit", function (event) {
+    event.preventDefault();
 
-    if (index >= 0) {
-      posts[index] = post;
-    } else {
-      posts.push(post);
+    if (saving) return;
+
+    const description = $("#post-title").val().trim();
+    const category = $("#post-category").val();
+    const format = $("#post-type").val();
+    const additionalInfo = $("#post-content").val().trim();
+
+    if (
+      !description ||
+      !category ||
+      !format ||
+      !additionalInfo
+    ) {
+      showStatus(
+        "Please complete all required fields.",
+        false
+      );
+      return;
     }
 
-    $.ajax({
-      url: "/api/posts",
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({ posts: posts })
-    }).done(function () {
-      displayPosts(posts);
-      $("#content-form")[0].reset();
-      showStatus("Post saved successfully!", true);
-    }).fail(function () {
-      posts = previousPosts;
-      showStatus("Could not save post to posts.json.", false);
-    });
-  });
+    const postData = {
+      description: description,
+      category: category,
+      format: format,
+      additionalInfo: additionalInfo
+    };
 
+    const isEditing = editingId !== null;
+
+    const url = isEditing
+      ? "/api/posts/" + editingId
+      : "/api/posts";
+
+    const method = isEditing ? "PUT" : "POST";
+
+    saving = true;
+    saveButton.prop("disabled", true);
+
+    $.ajax({
+      url: url,
+      method: method,
+      contentType: "application/json",
+      data: JSON.stringify(postData)
+    })
+      .done(function () {
+        showStatus(
+          isEditing
+            ? "Post updated successfully!"
+            : "Post created successfully!",
+          true
+        );
+
+        form[0].reset();
+        resetForm();
+
+        loadPosts();
+      })
+      .fail(function (xhr) {
+        showStatus(
+          xhr.responseJSON?.error ||
+          "Could not save the post.",
+          false
+        );
+      })
+      .always(function () {
+        saving = false;
+        saveButton.prop("disabled", false);
+      });
+  });
+  function deletePost(id) {
+    if (saving) return;
+
+    if (!confirm(
+      "Are you sure you want to delete this post?"
+    )) {
+      return;
+    }
+
+    saving = true;
+
+    $.ajax({
+      url: "/api/posts/" + id,
+      method: "DELETE"
+    })
+      .done(function () {
+        if (editingId === Number(id)) {
+          form[0].reset();
+          resetForm();
+        }
+
+        showStatus("Post deleted successfully!", true);
+        loadPosts();
+      })
+      .fail(function (xhr) {
+        showStatus(
+          xhr.responseJSON?.error ||
+          "Could not delete the post.",
+          false
+        );
+      })
+      .always(function () {
+        saving = false;
+      });
+  }
   $("#content-search-form").on("submit", function (event) {
     event.preventDefault();
 
-    const query = $("#content-search").val()
-      .toLowerCase().trim();
+    const query = $("#content-search")
+      .val()
+      .toLowerCase()
+      .trim();
 
     const results = posts.filter(function (post) {
       return (
         String(post.id).includes(query) ||
         post.description.toLowerCase().includes(query) ||
-        post.category.toLowerCase().includes(query)
+        post.category.toLowerCase().includes(query) ||
+        post.format.toLowerCase().includes(query)
       );
     });
 
     displayPosts(results);
-    showStatus(results.length + " matching posts found.", true);
+    showStatus(results.length + " matching posts.", true);
   });
 
   loadPosts();
