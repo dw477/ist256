@@ -2,6 +2,17 @@ const express = require("express");
 const fs = require("fs/promises");
 const path = require("path");
 
+const Database = require("better-sqlite3");
+
+const db = new Database(
+  path.join(__dirname, "blog.db")
+);
+
+db.pragma("foreign_keys = ON");
+
+console.log("SQLite database connected successfully!");
+
+
 const app = express();
 const PORT = 3000;
 const postsFile = path.join(__dirname, "posts.json");
