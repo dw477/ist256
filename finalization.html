@@ -106,13 +106,17 @@
             <button type="submit" id="save-post-preferences" class="btn active-page-btn">Save Preferences</button>
             <button type="reset" class="btn evil-page-btn">Clear Form</button>
           </p>
-        <form>
+        </form>
 
         <!-- JSON document prepared from the selected preferences -->
-        <pre id="post-preferences-json" class="border rounded p-3" aria-label="Post preferences JSON" hidden></pre>
-      </div>
+        <pre id="post-preferences-json" class="border rounded p-3"
+             aria-label="Post preferences JSON" hidden></pre>
 
+        <div id="preferences-manager"></div>
+
+      </div>
       </div> <!--/body-block-->
+
       </div> <!--/content-layout-->
     </main>
 
@@ -126,5 +130,6 @@
     <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
     <script src="finalization.js"></script>
+    <script src="preferences.js"></script>
   </body>
 </html>
