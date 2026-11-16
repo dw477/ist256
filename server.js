@@ -20,14 +20,42 @@ const postsFile = path.join(__dirname, "posts.json");
 app.use(express.json());
 app.use(express.static(__dirname));
 
-app.get("/api/posts", async (req, res) => {
+app.get("/api/posts", (req, res) => {
   try {
-    const data = await fs.readFile(postsFile, "utf8");
-    res.json(JSON.parse(data));
+    const rows = db.prepare(`
+      SELECT
+        post_id,
+        title,
+        category,
+        type,
+        content
+      FROM posts
+      ORDER BY post_id
+    `).all();
+
+    const posts = rows.map(function (post) {
+      return {
+        id: post.post_id,
+        description: post.title,
+        category: post.category,
+        format: post.type,
+        additionalInfo: post.content,
+        value: 5,
+        price: 0
+      };
+    });
+
+    res.json({ posts: posts });
+
   } catch (error) {
-    res.status(500).json({ error: "Could not read posts." });
+    console.error("SQLite read error:", error.message);
+
+    res.status(500).json({
+      error: "Could not retrieve posts from SQLite."
+    });
   }
 });
+
 app.post("/api/posts", async (req, res) => {
   try {
     const posts = req.body.posts;
