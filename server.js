@@ -299,14 +299,15 @@ app.post("/api/finalizations", async (req, res) => {
         error: "Invalid publication preferences."
       });
     }
+    const existingPost = db.prepare(`
+      SELECT post_id
+      FROM posts
+      WHERE post_id = ?
+    `).get(postId);
 
-    const postsData = JSON.parse(
-      await fs.readFile(postsFile, "utf8")
-    );
-
-    if (!postsData.posts.some(p => p.id === postId)) {
+    if (!existingPost) {
       return res.status(400).json({
-        error: "Blog post not found."
+        error: "Blog post not found in SQLite."
       });
     }
 
