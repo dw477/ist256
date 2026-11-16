@@ -244,14 +244,6 @@ app.delete("/api/posts/:id", (req, res) => {
   }
 });
 
-
-    res.json({ message: "posts.json updated successfully!" });
-  } catch (error) {
-    res.status(500).json({ error: "Could not save posts." });
-  }
-});
-
-
 const finalizationsFile = path.join(
   __dirname,
   "finalizations.json"
