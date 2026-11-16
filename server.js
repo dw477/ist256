@@ -56,32 +56,194 @@ app.get("/api/posts", (req, res) => {
   }
 });
 
-app.post("/api/posts", async (req, res) => {
-  try {
-    const posts = req.body.posts;
 
-    if (!Array.isArray(posts) || !posts.every(post =>
-      Number.isInteger(post.id) &&
-      post.id > 0 &&
-      typeof post.description === "string" &&
-      post.description.trim() &&
-      typeof post.category === "string" &&
-      post.category.trim() &&
-      typeof post.format === "string" &&
-      post.format.trim() &&
-      typeof post.price === "number" &&
-      post.price >= 0
-    )) {
+ // ========================================
+ // SQLITE POSTS CRUD API
+ // ========================================
+
+// Convert SQLite columns to frontend fields
+function formatPost(row) {
+  return {
+    id: row.post_id,
+    description: row.title,
+    category: row.category,
+    format: row.type,
+    additionalInfo: row.content,
+    value: 5,
+    price: 0
+  };
+}
+
+// READ - Get all posts
+app.get("/api/posts", (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT post_id, title, category, type, content
+      FROM posts
+      ORDER BY post_id
+    `).all();
+
+    res.json({
+      posts: rows.map(formatPost)
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Could not retrieve posts."
+    });
+  }
+});
+
+// CREATE - Add a new post
+app.post("/api/posts", (req, res) => {
+  try {
+    const {
+      description,
+      category,
+      format,
+      additionalInfo
+    } = req.body || {};
+
+    if (
+      typeof description !== "string" ||
+      !description.trim() ||
+      typeof category !== "string" ||
+      !category.trim() ||
+      typeof format !== "string" ||
+      !format.trim() ||
+      typeof additionalInfo !== "string" ||
+      !additionalInfo.trim()
+    ) {
       return res.status(400).json({
-        error: "Invalid post data."
+        error: "All post fields are required."
       });
     }
 
-    await fs.writeFile(
-      postsFile,
-      JSON.stringify({ posts }, null, 2),
-      "utf8"
+    const result = db.prepare(`
+      INSERT INTO posts
+      (title, category, type, content)
+      VALUES (?, ?, ?, ?)
+    `).run(
+      description.trim(),
+      category.trim(),
+      format.trim(),
+      additionalInfo.trim()
     );
+
+    const row = db.prepare(`
+      SELECT * FROM posts WHERE post_id = ?
+    `).get(result.lastInsertRowid);
+
+    res.status(201).json({
+      message: "Post created successfully!",
+      post: formatPost(row)
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Could not create post."
+    });
+  }
+});
+
+// UPDATE - Edit one existing post
+app.put("/api/posts/:id", (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    const {
+      description,
+      category,
+      format,
+      additionalInfo
+    } = req.body || {};
+
+    if (
+      !Number.isSafeInteger(id) ||
+      id <= 0 ||
+      typeof description !== "string" ||
+      !description.trim() ||
+      typeof category !== "string" ||
+      !category.trim() ||
+      typeof format !== "string" ||
+      !format.trim() ||
+      typeof additionalInfo !== "string" ||
+      !additionalInfo.trim()
+    ) {
+      return res.status(400).json({
+        error: "Invalid post information."
+      });
+    }
+
+    const result = db.prepare(`
+      UPDATE posts
+      SET title = ?,
+          category = ?,
+          type = ?,
+          content = ?
+      WHERE post_id = ?
+    `).run(
+      description.trim(),
+      category.trim(),
+      format.trim(),
+      additionalInfo.trim(),
+      id
+    );
+
+    if (result.changes === 0) {
+      return res.status(404).json({
+        error: "Post not found."
+      });
+    }
+
+    const row = db.prepare(`
+      SELECT * FROM posts WHERE post_id = ?
+    `).get(id);
+
+    res.json({
+      message: "Post updated successfully!",
+      post: formatPost(row)
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Could not update post."
+    });
+  }
+});
+
+app.delete("/api/posts/:id", (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (!Number.isSafeInteger(id) || id <= 0) {
+      return res.status(400).json({
+        error: "Invalid post ID."
+      });
+    }
+
+    const result = db.prepare(`
+      DELETE FROM posts
+      WHERE post_id = ?
+    `).run(id);
+
+    if (result.changes === 0) {
+      return res.status(404).json({
+        error: "Post not found."
+      });
+    }
+
+    res.json({
+      message: "Post deleted successfully!"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Could not delete post."
+    });
+  }
+});
+
 
     res.json({ message: "posts.json updated successfully!" });
   } catch (error) {
@@ -95,7 +257,6 @@ const finalizationsFile = path.join(
   "finalizations.json"
 );
 
-// Get saved finalizations
 app.get("/api/finalizations", async (req, res) => {
   try {
     const data = await fs.readFile(
