@@ -309,6 +309,35 @@ app.patch("/api/submissions/:id", async (req, res) => {
   }
 });
 
+app.get("/api/database-test", (req, res) => {
+  try {
+    const tables = db.prepare(`
+      SELECT name
+      FROM sqlite_master
+      WHERE type = 'table'
+      AND name NOT LIKE 'sqlite_%'
+    `).all();
+
+    const posts = db.prepare(`
+      SELECT *
+      FROM posts
+    `).all();
+
+    res.json({
+      message: "SQLite database connected successfully!",
+      tables: tables,
+      posts: posts
+    });
+
+  } catch (error) {
+    console.error("Database test error:", error.message);
+
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
