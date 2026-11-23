@@ -333,4 +333,43 @@ tr, td, th {
 
 .captions {
     color: white !important;
+
+}
+
+
+#pagination-nav .pagination {
+  gap: 0.4rem;
+}
+
+#pagination-nav .page-item {
+  border: none !important;
+  background: transparent !important;
+}
+
+#pagination-nav .page-item .page-link {
+  background: linear-gradient(to top,#404040 0%,#000000 20%, #000000 40%,#000000 55%,#494949 63%, #494949 100%) !important;
+  color: rgb(255, 255, 255) !important;
+  border: none !important;
+  border-radius: 7px !important;
+  box-shadow: none !important;
+}
+
+#pagination-nav .page-item .page-link:hover {
+  color: #ffffff !important;
+}
+
+#pagination-nav .page-item.active .page-link {
+  background: linear-gradient(to top,#329FC8 0%,#1A319A 20%, #1A319A 40%,#1A319A 55%,#6C8AC2 63%, #6E8FC4 100%) !important;
+  color: rgb(255, 255, 255) !important;
+  border: none !important;
+  border-radius: 7px !important;
+}
+
+#pagination-nav .page-item.active .page-link:hover {
+  color: #ffffff !important;
+}
+
+#pagination-nav .page-item.disabled .page-link {
+  opacity: 0.45;
+  pointer-events: none;
 }
